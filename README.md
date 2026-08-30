@@ -1,6 +1,7 @@
 # hush-hush-node
 
 [![ci](https://github.com/alrayyes/hush-hush-node/actions/workflows/ci.yml/badge.svg)](https://github.com/alrayyes/hush-hush-node/actions/workflows/ci.yml)
+[![Codecov](https://codecov.io/gh/alrayyes/hush-hush-node/graph/badge.svg)](https://codecov.io/gh/alrayyes/hush-hush-node)
 [![npm](https://img.shields.io/npm/v/hush-hush)](https://www.npmjs.com/package/hush-hush)
 [![release](https://img.shields.io/github/v/release/alrayyes/hush-hush-node)](https://github.com/alrayyes/hush-hush-node/releases)
 [![license](https://img.shields.io/github/license/alrayyes/hush-hush-node)](LICENSE)
