@@ -1,0 +1,35 @@
+# A handful of real-network smoke tests against a real hush-hush instance.
+# Deliberately excluded from the default PR pipeline (ci.yml) — see
+# design.md's testing layers: this is the thin, deliberately sparse layer,
+# not a substitute for the unit/contract tests that run on every PR.
+name: e2e
+
+on:
+  schedule:
+    - cron: "0 7 * * *" # nightly, 07:00 UTC
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    # No job-level `if` on secrets here on purpose — see hush-hush-go's
+    # CLAUDE.md for why that produced an invalid-workflow failure with zero
+    # jobs run. test/e2e's own fixture skips when these two repo secrets
+    # aren't set yet (Settings → Actions → secrets a bot account can't read
+    # or set for someone else's repo).
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Run smoke tests against staging hush-hush
+        run: npm run test:e2e
+        env:
+          HUSH_HUSH_BASE_URL: ${{ secrets.HUSH_HUSH_STAGING_URL }}
+          HUSH_HUSH_API_KEY: ${{ secrets.HUSH_HUSH_STAGING_API_KEY }}

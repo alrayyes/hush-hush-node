@@ -1,0 +1,36 @@
+# Deliberately ungated: a secret can be committed to any file, so there's no
+# diff this is safe to skip for.
+name: gitleaks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gitleaks-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GITLEAKS_VERSION: v8.30.1
+
+jobs:
+  secrets:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      # gitleaks itself is a Go binary — this is only here to get GOPATH/bin
+      # onto PATH before `go install`, which the runner's own preinstalled
+      # Go doesn't do on its own (confirmed live on hush-hush-python:
+      # "gitleaks: command not found" without this step).
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: "1.26"
+      - name: Install gitleaks
+        run: go install github.com/zricethezav/gitleaks/v8@${{ env.GITLEAKS_VERSION }}
+      - run: gitleaks git --redact --no-banner --log-opts="--branches --tags" .

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts"],
+  "exclude": ["src/generated/**"],
+  "out": "site",
+  "name": "hush-hush",
+  "readme": "README.md",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": true
+  }
+}

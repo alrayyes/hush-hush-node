@@ -1,0 +1,25 @@
+# Markdown this repo owns. The README is the first thing an integrator reads
+# off this SDK, and a broken link or a skipped heading level is exactly the
+# sort of thing nobody notices while writing it.
+globs:
+  - "**/*.md"
+
+ignores:
+  - CHANGELOG.md # written by the release job, not by hand
+  - "**/node_modules/**"
+  - "site/**" # TypeDoc build output
+  - "hush-hush/**" # the pinned submodule — someone else's docs, someone else's rules
+  # A historical planning record in OpenSpec's own format, not this repo's
+  # prose. openspec/README.md is ours and stays covered.
+  - "openspec/proposal.md"
+  - "openspec/design.md"
+  - "openspec/tasks.md"
+  - "openspec/specs/**"
+
+config:
+  line-length:
+    line_length: 80
+    tables: false
+    code_blocks: false
+
+extends: "markdownlint/style/prettier"
