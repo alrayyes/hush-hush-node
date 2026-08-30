@@ -50,6 +50,12 @@ jobs:
       - run: npm ci
       - name: vitest (hand-written layer only; see design.md's testing layers)
         run: npm test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          fail_ci_if_error: true
 
   audit:
     runs-on: ubuntu-24.04
