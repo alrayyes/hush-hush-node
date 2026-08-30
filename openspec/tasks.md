@@ -40,6 +40,6 @@
 
 ## 7. Cross-repo wiring
 
-- [ ] 7.1 Once the repo has real content and passes CI, request hush-hush's README be updated to link to it (coordinate with whoever owns that repo), and verify the link is live — requested from hush-hush-e6 2026-08-30, not yet confirmed live
+- [x] 7.1 Once the repo has real content and passes CI, request hush-hush's README be updated to link to it (coordinate with whoever owns that repo), and verify the link is live — alrayyes/hush-hush#87, merged, link confirmed live in the README's SDKs section
 - [x] 7.2 Close hush-hush issue #78, linking to the new repo, and verify the issue is closed with that link in its final comment
 - [x] 7.3 Note in hush-hush issue #76 that the Node package is ready for manual npm publish
