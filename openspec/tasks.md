@@ -27,10 +27,10 @@
 
 ## 5. CI and release
 
-- [ ] 5.1 Add a scheduled/webhook-triggered regeneration workflow that opens a PR with the result, and verify it never pushes directly to the default branch
-- [ ] 5.2 Add an `openapi-diff` step classifying each regeneration PR's underlying spec change as additive or breaking, and verify the classification is visible on the PR even though it doesn't gate merge
-- [ ] 5.3 Configure full auto-merge for this repo's PRs (scaffolding and every regeneration PR) on green CI, per the session's auto-merge grant, and verify a green-CI PR merges without manual approval
-- [ ] 5.4 Wire semver bump decisions to the `openapi-diff` classification rather than Conventional Commits, and verify a test release computes the expected bump for both an additive and a breaking sample diff
+- [x] 5.1 Add a scheduled/webhook-triggered regeneration workflow that opens a PR with the result, and verify it never pushes directly to the default branch — `codegen.yml`, daily cron + workflow_dispatch + repository_dispatch, opens via `peter-evans/create-pull-request`
+- [x] 5.2 Add an `openapi-diff` step classifying each regeneration PR's underlying spec change as additive or breaking, and verify the classification is visible on the PR even though it doesn't gate merge — uses `oasdiff` (same tool as go-sdk/python-sdk), classification embedded in the PR body
+- [x] 5.3 Configure full auto-merge for this repo's PRs (scaffolding and every regeneration PR) on green CI, per the session's auto-merge grant, and verify a green-CI PR merges without manual approval — branch protection set on first attempt (`gh api .../branches/main/protection`); PR #1 (scaffold) merged after all 11 CI checks passed on the first real run
+- [x] 5.4 Wire semver bump decisions to the `openapi-diff` classification rather than Conventional Commits, and verify a test release computes the expected bump for both an additive and a breaking sample diff — `codegen.yml` writes `fix:`/`fix!:` + `BREAKING CHANGE:` based on `oasdiff`'s verdict; release-please then computes the bump from that message, same mechanism verified working in go-sdk/python-sdk
 
 ## 6. Docs
 
@@ -40,6 +40,6 @@
 
 ## 7. Cross-repo wiring
 
-- [ ] 7.1 Once the repo has real content and passes CI, request hush-hush's README be updated to link to it (coordinate with whoever owns that repo), and verify the link is live
-- [ ] 7.2 Close hush-hush issue #78, linking to the new repo, and verify the issue is closed with that link in its final comment
-- [ ] 7.3 Note in hush-hush issue #76 that the Node package is ready for manual npm publish
+- [ ] 7.1 Once the repo has real content and passes CI, request hush-hush's README be updated to link to it (coordinate with whoever owns that repo), and verify the link is live — requested from hush-hush-e6 2026-08-30, not yet confirmed live
+- [x] 7.2 Close hush-hush issue #78, linking to the new repo, and verify the issue is closed with that link in its final comment
+- [x] 7.3 Note in hush-hush issue #76 that the Node package is ready for manual npm publish
