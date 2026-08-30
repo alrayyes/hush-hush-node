@@ -1,0 +1,20 @@
+node_modules/
+dist/
+coverage/
+site/
+package-lock.json
+
+# Written by the release job, not by hand.
+CHANGELOG.md
+
+# The pinned hush-hush submodule — vendored, not ours to reformat.
+hush-hush/
+
+# A historical record of the planning artifacts that built this repo, kept
+# in OpenSpec's own format for fidelity to the original — not prose this
+# repo writes or reformats to its own house style. openspec/README.md is
+# ours and stays covered.
+openspec/proposal.md
+openspec/design.md
+openspec/tasks.md
+openspec/specs/

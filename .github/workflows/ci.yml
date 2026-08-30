@@ -1,0 +1,175 @@
+# The gate. Every command in here has a twin in lefthook.yml, so a green
+# pre-commit means a green pipeline and neither can drift into being the only
+# place a rule is enforced.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
+
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npx biome check .
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - name: vitest (hand-written layer only; see design.md's testing layers)
+        run: npm test
+
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: npm audit --omit=dev
+
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: npm run build
+
+  # Proves the generated types file wasn't hand-edited: regenerating from the
+  # pinned submodule commit must produce a byte-identical file. See
+  # design.md's "Generated/hand-written boundary" decision.
+  codegen-drift:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: ./scripts/generate.sh
+      - run: git diff --exit-code src/generated
+
+  markdown:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - name: prettier --check
+        run: npm run format:check
+      - name: markdownlint
+        run: npm run lint:md
+
+  # Contract-test the client against a mock server built from the same pinned
+  # spec, per rules/sdk-generation.md's "testing against the spec, not a
+  # hand-written stub".
+  contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - name: Start Prism mock from the pinned spec
+        run: |
+          docker run -d --name prism -p 4010:4010 \
+            -v "$(pwd)/hush-hush/api:/spec:ro" \
+            stoplight/prism:5 mock -h 0.0.0.0 -m false /spec/openapi.yaml
+          # -m false: Prism's default multiprocess (Node cluster) mode
+          # crashes on startup in this image — see hush-hush-go's CLAUDE.md
+          # for the reproduction.
+          for _ in $(seq 1 30); do
+            curl -sf http://localhost:4010 >/dev/null 2>&1 && break
+            sleep 1
+          done
+      - name: Run contract tests against the mock
+        run: npm run test:contract
+        env:
+          HUSH_HUSH_BASE_URL: http://localhost:4010
+      - name: Prism logs
+        if: failure()
+        run: docker logs prism
+
+  # Records the client's real interactions as a Pact consumer contract.
+  # Provider verification against hush-hush's actual server has to run in
+  # hush-hush's own CI (see design.md's Risks — an external dependency this
+  # repo can't wire up unilaterally); this job's job is only to keep
+  # producing an up-to-date pact file for that to consume.
+  pact-consumer:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: npm run test:pact
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: hush-hush-node-pact
+          path: pact/pacts/*.json
+
+  commits:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - name: commitlint
+        run: |
+          npx commitlint \
+            --from "${{ github.event.pull_request.base.sha }}" \
+            --to "${{ github.event.pull_request.head.sha }}" \
+            --verbose

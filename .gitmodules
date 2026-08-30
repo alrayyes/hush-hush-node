@@ -1,0 +1,3 @@
+[submodule "hush-hush"]
+	path = hush-hush
+	url = https://github.com/alrayyes/hush-hush.git
