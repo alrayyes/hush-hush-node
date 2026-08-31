@@ -31,6 +31,19 @@ See proposal.md for motivation. Same constraints as the Go and Python SDKs (see 
 
 **Merge policy: full auto-merge for this session, scaffolding and all regeneration PRs alike** — an explicit, repeated grant from Ryan, given after being shown the risk that a breaking spec change can produce a small, green-CI-passing diff. The `openapi-diff` classification still runs and is surfaced on every PR for visibility; it doesn't gate merge.
 
+> **Correction (2026-08-31):** `codegen.yml` had implemented this as
+> permanent, unconditional CI auto-merge for every future regeneration
+> PR, not just the ones covered by the session that built this
+> scaffolding. A grant scoped to a session doesn't carry forward past it
+> (`CLAUDE.md`), and `rules/sdk-generation.md` requires real review on a
+> regeneration PR regardless of the `openapi-diff` classification — a
+> regenerated client can touch every file with a diff that says nothing
+> about the size of the underlying change. The auto-merge step is
+> removed; the classification still runs and posts to the PR for
+> visibility, same as before, it just no longer skips review. Leaving
+> this decision's original text above as the historical record rather
+> than rewriting it.
+
 **Auth: bearer token in the constructor with an `HUSH_HUSH_API_KEY` env var fallback; `X-Caller` as a per-call option, not client-level config.** Same reasoning as the other SDKs: the token is only required on write paths, and `X-Caller` attributes a specific call, not a client instance.
 
 **Retry: network failures, 5xx, and 429 only; exponential backoff with jitter; honor `Retry-After`.** Never retry other 4xx.
