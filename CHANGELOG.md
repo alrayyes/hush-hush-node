@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.0](https://github.com/alrayyes/hush-hush-node/compare/hush-hush-v1.1.0...hush-hush-v2.0.0) (2026-08-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* regenerate client from updated hush-hush spec ([#12](https://github.com/alrayyes/hush-hush-node/issues/12))
+
+### Bug Fixes
+
+* **ci:** don't fail CI on Codecov's Dependabot-token gap ([#14](https://github.com/alrayyes/hush-hush-node/issues/14)) ([87f3242](https://github.com/alrayyes/hush-hush-node/commit/87f32424a47a1c83b66ddef71c646db0376809a4))
+* **ci:** stop codegen.yml auto-merging every regeneration PR unconditionally ([#13](https://github.com/alrayyes/hush-hush-node/issues/13)) ([43ff6f7](https://github.com/alrayyes/hush-hush-node/commit/43ff6f762723016142394ddec34362cfb0e699ba))
+* regenerate client from updated hush-hush spec ([#12](https://github.com/alrayyes/hush-hush-node/issues/12)) ([90a9648](https://github.com/alrayyes/hush-hush-node/commit/90a9648e2fb328b6404c8c89eb919b375b6a4df7))
+
 ## [1.1.0](https://github.com/alrayyes/hush-hush-node/compare/hush-hush-v1.0.0...hush-hush-v1.1.0) (2026-08-30)
 
 
