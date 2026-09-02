@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/alrayyes/hush-hush-node/compare/hush-hush-v2.0.0...hush-hush-v3.0.0) (2026-09-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* regenerate client from updated hush-hush spec ([#16](https://github.com/alrayyes/hush-hush-node/issues/16))
+
+### Bug Fixes
+
+* regenerate client from updated hush-hush spec ([#16](https://github.com/alrayyes/hush-hush-node/issues/16)) ([9b8e376](https://github.com/alrayyes/hush-hush-node/commit/9b8e376d6e276497400c72916bf48c33b5b17ae8))
+
 ## [2.0.0](https://github.com/alrayyes/hush-hush-node/compare/hush-hush-v1.1.0...hush-hush-v2.0.0) (2026-08-31)
 
 
