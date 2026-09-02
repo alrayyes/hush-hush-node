@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.0.0...sdk-v4.1.0) (2026-09-02)
+
+
+### Features
+
+* **ci:** publish @hush-hush/sdk to npmjs on release ([#23](https://github.com/alrayyes/hush-hush-node/issues/23)) ([6a025f0](https://github.com/alrayyes/hush-hush-node/commit/6a025f032ac6972f6c243f33cd30f863fc61a7db)), closes [#20](https://github.com/alrayyes/hush-hush-node/issues/20)
+
 ## [4.0.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v3.0.0...sdk-v4.0.0) (2026-09-02)
 
 
