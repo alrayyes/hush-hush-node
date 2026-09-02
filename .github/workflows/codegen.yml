@@ -108,12 +108,20 @@ jobs:
             } >> "$GITHUB_OUTPUT"
           fi
 
+      # RELEASE_TOKEN, not the default GITHUB_TOKEN: a PR authored by
+      # GITHUB_TOKEN sits at action_required with zero jobs run on every
+      # workflow triggered against it -- ci.yml included, so a human
+      # reviewing this regeneration has no CI signal at all until someone
+      # clicks "Approve and run". RELEASE_TOKEN authors it as a real
+      # collaborator instead, so checks actually run; this doesn't change
+      # this job's own no-auto-merge-without-review policy, only whether
+      # a reviewer can see real CI results.
       - name: Open pull request
         if: steps.moved.outputs.changed == 'true'
         id: pr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
           commit-message: ${{ steps.message.outputs.title }}
           title: ${{ steps.message.outputs.title }}
           body: ${{ steps.message.outputs.body }}
