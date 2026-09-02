@@ -118,4 +118,4 @@ jobs:
           title: ${{ steps.message.outputs.title }}
           body: ${{ steps.message.outputs.body }}
           branch: codegen/regenerate
-          labels: kind/chore,topic/codegen
+          labels: codegen
