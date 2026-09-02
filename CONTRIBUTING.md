@@ -80,6 +80,14 @@ even though it doesn't gate the merge.
 [release-please](https://github.com/googleapis/release-please) reads the
 Conventional Commits on `main` and keeps a release pull request open with
 the next version and changelog entry; merging that one tags the release.
-Nobody picks a version by hand. Publishing the tagged release to npm is a
-deliberate manual step (see hush-hush issue #76), not automated in this
-repo's CI.
+Nobody picks a version by hand.
+
+Merging the release pull request also publishes the new version to npm:
+`release.yml`'s `publish-npm` job runs whenever release-please's
+`release_created` output is true, authenticating via npm Trusted
+Publishing (OIDC, configured on the `@hush-hush/sdk` package on npmjs.com)
+rather than a stored token, and passes `--provenance`. Publishing used to
+be a manual step tracked in
+[hush-hush issue #76](https://github.com/alrayyes/hush-hush/issues/76);
+that box is now permanently checked off for Node rather than a one-off
+per release.
