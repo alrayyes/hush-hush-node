@@ -13,7 +13,7 @@ hush-hush issue [#78](https://github.com/alrayyes/hush-hush/issues/78) asks for 
 - Testing: unit tests cover only the hand-written layer (retry, auth, pagination, error mapping) against a fake transport; contract tests run the client against a Prism mock generated from the same spec; a Pact consumer contract records real interactions for provider verification against hush-hush itself (verification step lives in hush-hush's own CI — external dependency).
 - Docs: TSDoc comments on all exported identifiers, built into a docs site via TypeDoc and published to GitHub Pages; a hand-written README quickstart covering install, auth setup, and one real call.
 - Targets Node 22+ (the oldest release still in Maintenance LTS as of 2026-08; non-LTS releases like 23/25/26 are not targeted).
-- Packaging via npm; publishing to the npm registry is a deliberate manual step tracked in [#76](https://github.com/alrayyes/hush-hush/issues/76), not automated in this repo's CI.
+- Packaging via npm; publishing was a deliberate manual step tracked in [#76](https://github.com/alrayyes/hush-hush/issues/76) and is now automated in this repo's CI (see design.md's "Packaging" decision).
 
 ## Capabilities
 

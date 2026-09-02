@@ -15,7 +15,6 @@ See proposal.md for motivation. Same constraints as the Go and Python SDKs (see 
 - A unified cross-language docs site.
 - Any change to hush-hush's server or its spec.
 - Implementing Pact provider verification inside hush-hush's own CI.
-- Automating the npm publish step — deliberately manual, tracked in hush-hush issue #76.
 
 ## Decisions
 
@@ -52,7 +51,7 @@ See proposal.md for motivation. Same constraints as the Go and Python SDKs (see 
 
 **Audit log: a plain typed query method, not an iterator.** hush-hush's `/audit-log` has no pagination parameters (checked directly against the spec) — it returns a flat array for the given filters, so `client.auditLog.query(filters)` resolves with the full result set rather than exposing an `AsyncIterable` over pages that don't exist.
 
-**Packaging: npm, ESM-first with a CJS fallback build** for broadest consumer compatibility; publishing to the npm registry is a manual maintainer step, not CI-automated, per hush-hush issue #76.
+**Packaging: npm, ESM-first with a CJS fallback build** for broadest consumer compatibility. Publishing was a manual maintainer step until release.yml grew a `publish-npm` job gated on release-please's `release_created` output — npm Trusted Publishing (OIDC), no stored token, `--provenance` on every publish. hush-hush issue #76 tracked the manual step across all three SDKs; Node's box there is now permanently automated rather than a one-off manual publish per release.
 
 ## Risks / Trade-offs
 
