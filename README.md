@@ -2,7 +2,7 @@
 
 [![ci](https://github.com/alrayyes/hush-hush-node/actions/workflows/ci.yml/badge.svg)](https://github.com/alrayyes/hush-hush-node/actions/workflows/ci.yml)
 [![Codecov](https://codecov.io/gh/alrayyes/hush-hush-node/graph/badge.svg)](https://codecov.io/gh/alrayyes/hush-hush-node)
-[![npm](https://img.shields.io/npm/v/hush-hush)](https://www.npmjs.com/package/hush-hush)
+[![npm](https://img.shields.io/npm/v/%40hush-hush%2Fsdk)](https://www.npmjs.com/package/@hush-hush/sdk)
 [![release](https://img.shields.io/github/v/release/alrayyes/hush-hush-node)](https://github.com/alrayyes/hush-hush-node/releases)
 [![license](https://img.shields.io/github/license/alrayyes/hush-hush-node)](LICENSE)
 
@@ -13,7 +13,7 @@ OpenAPI spec and kept in sync with it automatically.
 ## Install
 
 ```sh
-npm install hush-hush
+npm install @hush-hush/sdk
 ```
 
 Requires Node.js 22 or newer.
@@ -21,7 +21,7 @@ Requires Node.js 22 or newer.
 ## Quickstart
 
 ```ts
-import { Client } from "hush-hush";
+import { Client } from "@hush-hush/sdk";
 
 const client = new Client("https://hush-hush.example.com", {
   apiKey: "your-api-key", // or set HUSH_HUSH_API_KEY

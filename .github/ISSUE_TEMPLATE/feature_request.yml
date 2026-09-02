@@ -1,0 +1,24 @@
+name: Feature request
+description: New capability or request
+labels: ["kind/feature"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: "As a ‹who›, I want ‹what›, so that ‹why›"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: Given/When/Then, 3-5 testable rules
+    validations:
+      required: true
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of done
+    validations:
+      required: true
