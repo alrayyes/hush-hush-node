@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.1](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.1.0...sdk-v4.1.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **ci:** use RELEASE_TOKEN for the codegen PR, not GITHUB_TOKEN ([#30](https://github.com/alrayyes/hush-hush-node/issues/30)) ([a04abfd](https://github.com/alrayyes/hush-hush-node/commit/a04abfd5818d00ab081e1c35a3ce81c1e3a21f6b)), closes [#29](https://github.com/alrayyes/hush-hush-node/issues/29)
+
 ## [4.1.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.0.0...sdk-v4.1.0) (2026-09-02)
 
 
