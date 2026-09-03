@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.2](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.1.1...sdk-v4.1.2) (2026-09-03)
+
+
+### Bug Fixes
+
+* **ci:** put oasdiff on PATH so breaking-change detection works ([#37](https://github.com/alrayyes/hush-hush-node/issues/37)) ([ffa02d0](https://github.com/alrayyes/hush-hush-node/commit/ffa02d07bed12456e7faec5b5d474a3deaf06ba5))
+
 ## [4.1.1](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.1.0...sdk-v4.1.1) (2026-09-02)
 
 
