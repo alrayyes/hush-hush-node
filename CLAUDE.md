@@ -44,11 +44,6 @@ components["schemas"]["X"]` aliases.** TypeDoc can't attach a stable
   `skills/repo-creation/`) — every config file here (biome.json, lefthook,
   commitlint, markdownlint, prettier, all eight workflows) was hand-assembled
   rather than cloned from a sibling. Flagged to the dotfiles maintainers.
-- **Full auto-merge is on for this repo's PRs, scaffolding and regeneration
-  alike** — a session-scoped grant during initial development, not the
-  standing Renovate/Dependabot exception `rules/sdk-generation.md` otherwise
-  requires review for. `oasdiff`'s breaking-change classification still
-  shows up on every regeneration PR; it just doesn't block the merge.
 - **No Vale/ltex prose-quality tier.** Markdown gets Prettier + markdownlint
   (mechanics), not grammar/style checking — same deliberate scope cut as
   `hush-hush-go`/`hush-hush-python`.
