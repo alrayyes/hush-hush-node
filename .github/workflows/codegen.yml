@@ -62,7 +62,19 @@ jobs:
 
       - name: Install oasdiff
         if: steps.moved.outputs.changed == 'true'
-        run: go install github.com/oasdiff/oasdiff@v1.11.6
+        # go install alone doesn't put it on PATH for the next step - a
+        # plain `run:` is a fresh non-login shell each time, and this
+        # runner's preinstalled Go was never set up via actions/setup-go
+        # (this job installs Node, not Go), which is what would normally
+        # add $(go env GOPATH)/bin itself. Same bug hush-hush-python
+        # found and fixed (PR #13): the classify step's `oasdiff` call
+        # fails with "command not found", and its own error handling
+        # (any non-zero exit from `oasdiff breaking` counts as breaking)
+        # mislabels every regeneration as breaking regardless of the
+        # real spec diff - confirmed live on PR #36 here.
+        run: |
+          go install github.com/oasdiff/oasdiff@v1.11.6
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Classify the spec change
         if: steps.moved.outputs.changed == 'true'
