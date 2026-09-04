@@ -1,6 +1,6 @@
 {
   "name": "@hush-hush/sdk",
-  "version": "4.1.3",
+  "version": "4.1.4",
   "description": "Official Node.js/TypeScript SDK for hush-hush, generated from its OpenAPI spec",
   "keywords": [
     "hush-hush",
