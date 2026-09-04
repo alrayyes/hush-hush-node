@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.1.4...sdk-v4.2.0) (2026-09-04)
+
+
+### Features
+
+* **ci:** cache npm dependencies in every setup-node step ([#44](https://github.com/alrayyes/hush-hush-node/issues/44)) ([3a8d03b](https://github.com/alrayyes/hush-hush-node/commit/3a8d03b7831fb23b43a451f4e17feea0fb22fa69)), closes [#43](https://github.com/alrayyes/hush-hush-node/issues/43)
+
 ## [4.1.4](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.1.3...sdk-v4.1.4) (2026-09-04)
 
 
