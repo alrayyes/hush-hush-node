@@ -17,6 +17,10 @@ pre-commit:
       glob: "*.md"
       run: npx markdownlint-cli2 {staged_files}
 
+    - name: vale
+      glob: "*.md"
+      run: ./scripts/lint-vale.sh
+
     - name: sort-package-json
       glob: "package.json"
       run: npx sort-package-json {staged_files}
@@ -48,3 +52,9 @@ pre-push:
 
     - name: lint:md
       run: npm run lint:md
+
+    - name: vale
+      run: ./scripts/lint-vale.sh
+
+    - name: ltex
+      run: ./scripts/lint-ltex.sh

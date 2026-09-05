@@ -41,12 +41,9 @@ components["schemas"]["X"]` aliases.** TypeDoc can't attach a stable
   and the type import silently stops resolving.
 - **No TypeScript-specific GitHub-native scaffold sibling existed yet** when
   this repo was built (only `scaffold-go-api` does, per
-  `skills/repo-creation/`) — every config file here (biome.json, lefthook,
+  `skills/repo-creation/`) — every config file here (`biome.json`, lefthook,
   commitlint, markdownlint, prettier, all eight workflows) was hand-assembled
   rather than cloned from a sibling. Flagged to the dotfiles maintainers.
-- **No Vale/ltex prose-quality tier.** Markdown gets Prettier + markdownlint
-  (mechanics), not grammar/style checking — same deliberate scope cut as
-  `hush-hush-go`/`hush-hush-python`.
 - **`HUSH_HUSH_STAGING_URL`/`HUSH_HUSH_STAGING_API_KEY` secrets aren't set
   yet.** `e2e.yml`'s smoke tests skip cleanly until a maintainer adds them —
   Actions secrets can't be read or set by anyone but the repo owner.

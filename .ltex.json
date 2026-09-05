@@ -1,0 +1,33 @@
+{
+  "ltex": {
+    "language": "en-US",
+    "dictionary": {
+      "en-US": [
+        "CI",
+        "CommonJS",
+        "Codecov",
+        "OpenAPI",
+        "Quickstart",
+        "TypeDoc",
+        "ci",
+        "commitlint",
+        "dotfiles",
+        "json",
+        "lefthook",
+        "lockfileVersion",
+        "markdownlint",
+        "npm",
+        "org-wide"
+      ]
+    },
+    "disabledRules": {
+      "en-US": [
+        "PASSIVE_VOICE",
+        "UPPERCASE_SENTENCE_START",
+        "EN_COMPOUNDS_HAND_WRITTEN",
+        "PREPOSITION_VERB",
+        "A_INFINITIVE"
+      ]
+    }
+  }
+}
