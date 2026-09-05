@@ -15,6 +15,11 @@ ignores:
   - "openspec/design.md"
   - "openspec/tasks.md"
   - "openspec/specs/**"
+  # Vale's own style packages, fetched by `vale sync`, not committed - never
+  # ignore styles/ wholesale, or styles/House (this repo's own vocabulary)
+  # goes with it.
+  - "styles/Google/**"
+  - "styles/proselint/**"
 
 config:
   line-length:

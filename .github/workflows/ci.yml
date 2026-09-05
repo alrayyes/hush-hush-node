@@ -123,6 +123,28 @@ jobs:
       - name: markdownlint
         run: npm run lint:md
 
+  # Mechanics: grammar, spelling, the phonetic article. A right answer, so
+  # this one gates rather than advises.
+  grammar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    container:
+      image: ghcr.io/alrayyes/ltex-cli-plus:18.7.0@sha256:22452e86a130e528d526b60792926002983fcbf732bff09bd4e843d22816e4ea
+      options: --entrypoint ""
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: ./scripts/lint-ltex.sh
+
+  # Style: house voice, weasel words, corporate speak. Advice rather than a
+  # verdict - MinAlertLevel in .vale.ini prints it, and only Vale.Terms
+  # takes the job down.
+  style:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: ./scripts/lint-vale.sh
+
   # Contract-test the client against a mock server built from the same pinned
   # spec, per rules/sdk-generation.md's "testing against the spec, not a
   # hand-written stub".

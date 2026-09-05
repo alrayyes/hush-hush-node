@@ -3,6 +3,10 @@ dist/
 coverage/
 .DS_Store
 
+# Vale packages, fetched by `vale sync`, not committed.
+styles/Google/
+styles/proselint/
+
 # TypeDoc build output
 site/
 
