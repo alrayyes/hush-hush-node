@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.2.2](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.1...sdk-v4.2.2) (2026-09-09)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump the node-dependencies group with 2 updates ([#55](https://github.com/alrayyes/hush-hush-node/issues/55)) ([3757ea0](https://github.com/alrayyes/hush-hush-node/commit/3757ea09f652b5558200da2d666ba70b3207f255))
+* **deps:** track bun.lock instead of package-lock.json ([#58](https://github.com/alrayyes/hush-hush-node/issues/58)) ([594cf67](https://github.com/alrayyes/hush-hush-node/commit/594cf679b75518bba503cdafde48193cd0aac2e6))
+
 ## [4.2.1](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.0...sdk-v4.2.1) (2026-09-05)
 
 
