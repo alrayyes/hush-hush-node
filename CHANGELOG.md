@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.3](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.2...sdk-v4.2.3) (2026-09-09)
+
+
+### Bug Fixes
+
+* **deps:** downgrade bun.lock to lockfileVersion 1 for Dependabot ([#60](https://github.com/alrayyes/hush-hush-node/issues/60)) ([8110f42](https://github.com/alrayyes/hush-hush-node/commit/8110f424dc7f6d18a99c5144a316e2226deba974))
+
 ## [4.2.2](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.1...sdk-v4.2.2) (2026-09-09)
 
 
