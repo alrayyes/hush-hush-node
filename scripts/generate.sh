@@ -11,7 +11,7 @@ SPEC_COMMIT=$(git -C hush-hush rev-parse HEAD)
 OUT=src/generated/types.ts
 
 mkdir -p src/generated
-npx openapi-typescript hush-hush/api/openapi.yaml -o "$OUT"
+bunx openapi-typescript hush-hush/api/openapi.yaml -o "$OUT"
 
 # openapi-typescript already stamps its own generated-file banner; this adds
 # the pinned spec commit so a maintainer can trace a release back to the
@@ -20,4 +20,4 @@ npx openapi-typescript hush-hush/api/openapi.yaml -o "$OUT"
 sed -i "3a\\
  * Generated from hush-hush spec commit ${SPEC_COMMIT}." "$OUT"
 
-npx biome check --write "$OUT" >/dev/null
+bunx biome check --write "$OUT" >/dev/null

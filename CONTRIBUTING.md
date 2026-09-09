@@ -2,15 +2,12 @@
 
 ## Getting set up
 
-- **Node.js 22 or newer**, and **npm** — the package manager this repo uses.
-  Not bun: bun's default `bun.lock` (lockfileVersion 2) is currently
-  incompatible with Dependabot's `bun` ecosystem support, which would leave
-  every dependency in this all-JS repo unwatched.
+- **Node.js 22 or newer**, and **bun** — the package manager this repo uses.
 
 One command installs everything:
 
 ```sh
-npm install
+bun install
 ```
 
 The `prepare` script runs `lefthook install` for you — an uninstalled hook
@@ -23,13 +20,13 @@ a plain clone.
 ## Everyday commands
 
 ```sh
-npx biome check --write .    # the fixer; drop --write for the check
-npm run typecheck
-npm test                     # unit tests only; contract/pact need extra setup, see ci.yml
+bunx biome check --write .   # the fixer; drop --write for the check
+bun run typecheck
+bun run test                 # unit tests only; contract/pact need extra setup, see ci.yml
 ./scripts/generate.sh        # regenerate src/generated/types.ts from the pinned spec
 
-npm run format:check         # prettier --check, add :write to fix
-npm run lint:md
+bun run format:check         # prettier --check, add :write to fix
+bun run lint:md
 ```
 
 ## How it fits together

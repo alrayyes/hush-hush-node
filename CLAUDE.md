@@ -21,12 +21,6 @@ specific to this repo.
   `hush-hush/api/openapi.yaml` — not this repo's own spec. Clone with
   `--recurse-submodules`. A spec change belongs in hush-hush; this repo
   picks it up on the next scheduled regeneration.
-- **npm, not bun.** `rules/javascript.md` defaults to bun, but bun's
-  default `bun.lock` (lockfileVersion 2) is confirmed incompatible with
-  Dependabot's `bun` ecosystem support (found during hush-hush-python's
-  build) — using it here would leave every dependency in this all-JS repo
-  unwatched. Flagged to the dotfiles maintainers as a likely org-wide gap
-  in every scaffold pinning `bun@1.4.0`.
 - **The generated-type re-exports (`ObjectMetadata`, `UsedBy`, `Health`,
   `AuditLogEntry`) are `interface X extends _X {}`, not bare `type X =
 components["schemas"]["X"]` aliases.** TypeDoc can't attach a stable
