@@ -49,6 +49,9 @@
     "test:pact": "vitest run test/pact",
     "typecheck": "tsc --noEmit"
   },
+  "overrides": {
+    "smol-toml": "1.7.2"
+  },
   "devDependencies": {
     "@biomejs/biome": "2.5.12",
     "@commitlint/cli": "21.2.2",
