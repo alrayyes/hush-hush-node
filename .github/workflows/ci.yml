@@ -45,8 +45,10 @@ jobs:
         with:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile
+      # --reporter=junit (alongside the default reporter) feeds Codecov
+      # Test Analytics below.
       - name: vitest (hand-written layer only; see design.md's testing layers)
-        run: bun run test
+        run: bunx vitest run test/unit --coverage --reporter=default --reporter=junit --outputFile=junit.xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
@@ -61,6 +63,18 @@ jobs:
           # would fail every Dependabot PR's CI on that basis alone
           # (confirmed on the sibling hush-hush-php repo's PRs #13/#14,
           # where the tests themselves passed clean).
+          fail_ci_if_error: false
+      # Test Analytics: per-test failure/flake detail, not just a coverage
+      # delta. !cancelled(), not the step default - this still runs when
+      # vitest above failed (junit.xml exists either way), but not if the
+      # whole run was cancelled out from under it.
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          report-type: test_results
+          files: junit.xml
           fail_ci_if_error: false
 
   audit:
