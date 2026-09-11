@@ -123,6 +123,9 @@ jobs:
         with:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile
+      - name: bun.lock stays at lockfileVersion 1 (Dependabot can't parse 2 - see #62)
+        run: |
+          grep -q '"lockfileVersion": 1,' bun.lock
       - name: prettier --check
         run: bun run format:check
       - name: markdownlint
