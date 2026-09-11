@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.4](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.3...sdk-v4.2.4) (2026-09-11)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump the bun-dependencies group with 2 updates ([#65](https://github.com/alrayyes/hush-hush-node/issues/65)) ([fe15930](https://github.com/alrayyes/hush-hush-node/commit/fe15930e1f7c5bb1970fe4012f8dff5419558d12))
+
 ## [4.2.3](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.2...sdk-v4.2.3) (2026-09-09)
 
 
