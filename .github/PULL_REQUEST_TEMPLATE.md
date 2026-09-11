@@ -2,5 +2,5 @@
 
 ## Test plan
 
-- [ ] Tests pass locally (`npm test`)
+- [ ] Tests pass locally (`bun test`)
 - [ ] CI is green
