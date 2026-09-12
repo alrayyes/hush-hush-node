@@ -1,0 +1,41 @@
+# codegen.yml opens a regeneration pull request whenever hush-hush's spec
+# moves but never merges it -- Ryan granted a durable, account-wide
+# standing exception for this class of PR on 2026-09-11
+# (rules/sdk-generation.md's "Regeneration in CI" section): merge once CI
+# is green, the same way a Renovate/Dependabot/release-please PR already
+# does, since oasdiff already classified the spec diff (additive vs
+# breaking) into the commit type before this ever runs -- there's no
+# human judgment left to add.
+#
+# Gated on both the label codegen.yml applies and its fixed branch name,
+# not just one -- topic/codegen alone could plausibly land on an
+# unrelated hand-written PR about the generator pipeline itself.
+#
+# pull_request, not pull_request_target: codegen.yml's pull request comes
+# from a branch on this repo (codegen/regenerate), never a fork.
+name: codegen-auto-merge
+
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: |
+      github.event.pull_request.head.ref == 'codegen/regenerate' &&
+      contains(github.event.pull_request.labels.*.name, 'topic/codegen')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      # RELEASE_TOKEN, not the default GITHUB_TOKEN: same anti-recursion-
+      # guard gap release-auto-merge.yml documents -- a GITHUB_TOKEN merge
+      # produces a commit GitHub won't re-trigger workflows on, which
+      # would leave this repo's own release.yml never firing after an
+      # auto-merged regeneration lands on main.
+      - name: Enable auto-merge
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
