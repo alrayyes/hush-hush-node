@@ -16,6 +16,13 @@ updates:
     commit-message:
       prefix: fix
       include: scope
+    # TypeScript 7 is the Go-rewritten compiler with a different internal
+    # API — tsup's rollup-plugin-dts and openapi-typescript's codegen both
+    # crash on it (#76). Ignore until they catch up; drop this once a bump
+    # to either builds clean against TS 7.
+    ignore:
+      - dependency-name: "typescript"
+        versions: [">=7.0.0"]
     groups:
       bun-dependencies:
         patterns: ["*"]
