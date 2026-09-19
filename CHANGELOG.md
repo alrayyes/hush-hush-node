@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.0.1](https://github.com/alrayyes/hush-hush-node/compare/sdk-v5.0.0...sdk-v5.0.1) (2026-09-19)
+
+
+### Bug Fixes
+
+* **ci:** gate codegen-auto-merge on the codegen label, not topic/codegen ([#94](https://github.com/alrayyes/hush-hush-node/issues/94)) ([cc0d54f](https://github.com/alrayyes/hush-hush-node/commit/cc0d54f579ddb26ad3528067e724b65579104613)), closes [#93](https://github.com/alrayyes/hush-hush-node/issues/93)
+* regenerate client from updated hush-hush spec ([#92](https://github.com/alrayyes/hush-hush-node/issues/92)) ([9ac4b38](https://github.com/alrayyes/hush-hush-node/commit/9ac4b383b996f6c8bdd2db783737344f357695b5))
+* regenerate client from updated hush-hush spec ([#95](https://github.com/alrayyes/hush-hush-node/issues/95)) ([da25e2c](https://github.com/alrayyes/hush-hush-node/commit/da25e2cdb1f7c6d32256241b372d440c6be81e0b))
+
 ## [5.0.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.7...sdk-v5.0.0) (2026-09-19)
 
 
