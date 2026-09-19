@@ -20,7 +20,7 @@ describe.skipIf(!baseUrl)("contract", () => {
   });
 
   it("reports the mock server as healthy", async () => {
-    expect(await client.health()).toEqual({ status: "ok" });
+    expect(await client.health()).toEqual({ status: "ok", version: expect.any(String) });
   });
 
   it("creates, fetches, updates, and deletes an object", async () => {
