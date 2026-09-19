@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.0.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.7...sdk-v5.0.0) (2026-09-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* regenerate client from updated hush-hush spec
+
+### Bug Fixes
+
+* **deps-dev:** bump the bun-dependencies group with 2 updates ([#87](https://github.com/alrayyes/hush-hush-node/issues/87)) ([a0f3757](https://github.com/alrayyes/hush-hush-node/commit/a0f375794c5f94293be397b199adb682b9ec3fb3))
+* **deps-dev:** bump the bun-dependencies-major group across 1 directory with 3 updates ([#84](https://github.com/alrayyes/hush-hush-node/issues/84)) ([9e98986](https://github.com/alrayyes/hush-hush-node/commit/9e989868ea2d52edd902327bf8f974d03713b386))
+* regenerate client from updated hush-hush spec ([228fd1c](https://github.com/alrayyes/hush-hush-node/commit/228fd1cf1b85e62b2ddfbea04efdc37297d3eeb9))
+* regenerate client from updated hush-hush spec ([#89](https://github.com/alrayyes/hush-hush-node/issues/89)) ([7e909de](https://github.com/alrayyes/hush-hush-node/commit/7e909ded0be217ee7acb3167876f076e90295b24))
+
 ## [4.2.7](https://github.com/alrayyes/hush-hush-node/compare/sdk-v4.2.6...sdk-v4.2.7) (2026-09-13)
 
 
