@@ -17,6 +17,7 @@ permissions:
 jobs:
   smoke:
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     # No job-level `if` on secrets here on purpose — see hush-hush-go's
     # CLAUDE.md for why that produced an invalid-workflow failure with zero
     # jobs run. test/e2e's own fixture skips when these two repo secrets

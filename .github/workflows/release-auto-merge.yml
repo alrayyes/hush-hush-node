@@ -22,6 +22,7 @@ jobs:
     # identity runs googleapis/release-please-action, not a bot account.
     if: "contains(github.event.pull_request.labels.*.name, 'autorelease: pending')"
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
       # RELEASE_TOKEN, not the default GITHUB_TOKEN: GitHub suppresses the
       # push event a GITHUB_TOKEN-performed merge produces (to stop

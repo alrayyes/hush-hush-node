@@ -21,6 +21,7 @@ jobs:
   auto-merge:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
       - run: gh pr merge --auto --squash "$PR_URL"
         env:
