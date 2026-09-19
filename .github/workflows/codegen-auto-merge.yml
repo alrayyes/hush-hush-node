@@ -8,8 +8,8 @@
 # human judgment left to add.
 #
 # Gated on both the label codegen.yml applies and its fixed branch name,
-# not just one -- topic/codegen alone could plausibly land on an
-# unrelated hand-written PR about the generator pipeline itself.
+# not just one -- codegen alone could plausibly land on an unrelated
+# hand-written PR about the generator pipeline itself.
 #
 # pull_request, not pull_request_target: codegen.yml's pull request comes
 # from a branch on this repo (codegen/regenerate), never a fork.
@@ -25,7 +25,7 @@ jobs:
   auto-merge:
     if: |
       github.event.pull_request.head.ref == 'codegen/regenerate' &&
-      contains(github.event.pull_request.labels.*.name, 'topic/codegen')
+      contains(github.event.pull_request.labels.*.name, 'codegen')
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
