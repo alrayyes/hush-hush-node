@@ -8,7 +8,7 @@
 # human judgment left to add.
 #
 # Gated on the label codegen.yml applies, its fixed branch name, AND the
-# PR title's Conventional Commits bump marker -- topic/codegen alone could
+# PR title's Conventional Commits bump marker -- codegen alone could
 # plausibly land on an unrelated hand-written PR about the generator
 # pipeline itself, and branch name + label alone auto-merged a breaking
 # regen unreviewed at least twice before this gate existed (#106):
@@ -16,6 +16,12 @@
 # regeneration "fix!: ..." specifically so this workflow has something
 # deterministic to gate on, without the two workflows sharing job outputs
 # across separate trigger events.
+#
+# 'codegen', not 'topic/codegen': #27 switched codegen.yml to GitHub's
+# stock label taxonomy and #94 fixed this gate to match, but #107's
+# breaking-marker fix was carried over from php/python/go verbatim and
+# silently reintroduced the retired label name -- confirmed live on
+# alrayyes/hush-hush-node#110, whose auto-merge job never fired.
 #
 # pull_request, not pull_request_target: codegen.yml's pull request comes
 # from a branch on this repo (codegen/regenerate), never a fork.
@@ -31,7 +37,7 @@ jobs:
   auto-merge:
     if: |
       github.event.pull_request.head.ref == 'codegen/regenerate' &&
-      contains(github.event.pull_request.labels.*.name, 'topic/codegen') &&
+      contains(github.event.pull_request.labels.*.name, 'codegen') &&
       !startsWith(github.event.pull_request.title, 'fix!:')
     runs-on: ubuntu-24.04
     timeout-minutes: 5
