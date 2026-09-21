@@ -1,27 +1,25 @@
 # codegen.yml opens a regeneration pull request whenever hush-hush's spec
 # moves but never merges it -- Ryan granted a durable, account-wide
-# standing exception for this class of PR on 2026-09-11
-# (rules/sdk-generation.md's "Regeneration in CI" section): merge once CI
-# is green, the same way a Renovate/Dependabot/release-please PR already
-# does, since oasdiff already classified the spec diff (additive vs
-# breaking) into the commit type before this ever runs -- there's no
-# human judgment left to add.
+# standing exception for this class of PR on 2026-09-21, now written down
+# in rules/sdk-generation.md's "Regeneration in CI" section
+# (alrayyes/dotfiles#629) rather than only asserted in comments here: merge
+# once CI is green, the same way a Renovate/Dependabot/release-please PR
+# already does, whether oasdiff classified the underlying spec change as
+# additive or breaking -- there's no human judgment left to add on top of
+# that classification, so this workflow doesn't gate on the commit's
+# breaking-change marker (an earlier version did, per #106/#107, before the
+# exception covered breaking changes too).
 #
-# Gated on the label codegen.yml applies, its fixed branch name, AND the
-# PR title's Conventional Commits bump marker -- codegen alone could
-# plausibly land on an unrelated hand-written PR about the generator
-# pipeline itself, and branch name + label alone auto-merged a breaking
-# regen unreviewed at least twice before this gate existed (#106):
-# codegen.yml's own "Build commit message" step titles a breaking
-# regeneration "fix!: ..." specifically so this workflow has something
-# deterministic to gate on, without the two workflows sharing job outputs
-# across separate trigger events.
+# Gated on the label codegen.yml applies and its fixed branch name --
+# codegen alone could plausibly land on an unrelated hand-written PR about
+# the generator pipeline itself, so both together are what keep this
+# scoped to codegen.yml's own regeneration PRs.
 #
 # 'codegen', not 'topic/codegen': #27 switched codegen.yml to GitHub's
-# stock label taxonomy and #94 fixed this gate to match, but #107's
-# breaking-marker fix was carried over from php/python/go verbatim and
-# silently reintroduced the retired label name -- confirmed live on
-# alrayyes/hush-hush-node#110, whose auto-merge job never fired.
+# stock label taxonomy and #94 fixed this gate to match -- keep it that
+# way; #107's breaking-marker fix carried the retired label name over from
+# php/python/go verbatim and silently broke this gate, confirmed live on
+# alrayyes/hush-hush-node#110.
 #
 # pull_request, not pull_request_target: codegen.yml's pull request comes
 # from a branch on this repo (codegen/regenerate), never a fork.
@@ -37,8 +35,7 @@ jobs:
   auto-merge:
     if: |
       github.event.pull_request.head.ref == 'codegen/regenerate' &&
-      contains(github.event.pull_request.labels.*.name, 'codegen') &&
-      !startsWith(github.event.pull_request.title, 'fix!:')
+      contains(github.event.pull_request.labels.*.name, 'codegen')
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
