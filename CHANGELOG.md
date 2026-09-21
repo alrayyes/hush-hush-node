@@ -1,5 +1,34 @@
 # Changelog
 
+## [6.0.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v5.0.2...sdk-v6.0.0) (2026-09-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* regenerate client from updated hush-hush spec
+
+### Bug Fixes
+
+* **ci:** drop the wretry.action wrapper from release.yml ([de36fa9](https://github.com/alrayyes/hush-hush-node/commit/de36fa987d785b8c3a00bbb88da16658de2c764f))
+* **ci:** drop the wretry.action wrapper from release.yml ([748058a](https://github.com/alrayyes/hush-hush-node/commit/748058a2b7199814e15cf8895b9e88c4e7f18e43))
+* **ci:** gate codegen-auto-merge on the breaking-change marker ([#107](https://github.com/alrayyes/hush-hush-node/issues/107)) ([22e0e7a](https://github.com/alrayyes/hush-hush-node/commit/22e0e7ad6b489dcea7a51b63fc9c95fca72d98a4)), closes [#106](https://github.com/alrayyes/hush-hush-node/issues/106)
+* **ci:** gate codegen-auto-merge on the codegen label, not topic/codegen ([a52a162](https://github.com/alrayyes/hush-hush-node/commit/a52a16283f8836a8df97a68d4c9860e72ec03233))
+* **ci:** gate codegen-auto-merge on the codegen label, not topic/codegen ([7809d4e](https://github.com/alrayyes/hush-hush-node/commit/7809d4e8e62bb13afc7aa26539f0566fc9a0bde4))
+* **deps-dev:** bump the bun-dependencies group with 6 updates ([#113](https://github.com/alrayyes/hush-hush-node/issues/113)) ([aca2f14](https://github.com/alrayyes/hush-hush-node/commit/aca2f14ad34ebec83280050801fd8f9fd0f0a4f7))
+* regenerate client from updated hush-hush spec ([7e5c002](https://github.com/alrayyes/hush-hush-node/commit/7e5c0022be49658802bcb649568c1694ec17b845))
+* regenerate client from updated hush-hush spec ([04020f2](https://github.com/alrayyes/hush-hush-node/commit/04020f21196b47ee645dbf701d0b4b23db4272ef))
+* regenerate client from updated hush-hush spec ([3467916](https://github.com/alrayyes/hush-hush-node/commit/3467916bf0111bcfe6b0e092e60f9add368a948a))
+* regenerate client from updated hush-hush spec ([f301080](https://github.com/alrayyes/hush-hush-node/commit/f30108026d5530faf5b556ae4ebee9a7f53122d4))
+* regenerate client from updated hush-hush spec ([6c92aa1](https://github.com/alrayyes/hush-hush-node/commit/6c92aa182be9fd23c24dfab0313a31677976cd84))
+* regenerate client from updated hush-hush spec ([344488c](https://github.com/alrayyes/hush-hush-node/commit/344488c99fb043a6189fb6147f4f305df2a5790d))
+* regenerate client from updated hush-hush spec ([b6c9d10](https://github.com/alrayyes/hush-hush-node/commit/b6c9d10d9f11452cf8bb72f7e6541245d7107478))
+* regenerate client from updated hush-hush spec ([#101](https://github.com/alrayyes/hush-hush-node/issues/101)) ([08caacb](https://github.com/alrayyes/hush-hush-node/commit/08caacbd868aca94adbabf63ff76972288f7cc38))
+* regenerate client from updated hush-hush spec ([#102](https://github.com/alrayyes/hush-hush-node/issues/102)) ([3d545dc](https://github.com/alrayyes/hush-hush-node/commit/3d545dcea40911837e061280c904ffc2f252f8e3))
+* regenerate client from updated hush-hush spec ([#103](https://github.com/alrayyes/hush-hush-node/issues/103)) ([16591e8](https://github.com/alrayyes/hush-hush-node/commit/16591e86c445c60748710997851be15c3be85809))
+* regenerate client from updated hush-hush spec ([#105](https://github.com/alrayyes/hush-hush-node/issues/105)) ([8253c68](https://github.com/alrayyes/hush-hush-node/commit/8253c685351d7a65b2b2770b359815513ee41937))
+* regenerate client from updated hush-hush spec ([#108](https://github.com/alrayyes/hush-hush-node/issues/108)) ([9435156](https://github.com/alrayyes/hush-hush-node/commit/943515656e06503923c34c491134a7ca55fead1a))
+* regenerate client from updated hush-hush spec ([#116](https://github.com/alrayyes/hush-hush-node/issues/116)) ([84a0a31](https://github.com/alrayyes/hush-hush-node/commit/84a0a319aad8ce35b2d30828403aa6d672a62055))
+
 ## [5.0.2](https://github.com/alrayyes/hush-hush-node/compare/sdk-v5.0.1...sdk-v5.0.2) (2026-09-19)
 
 
