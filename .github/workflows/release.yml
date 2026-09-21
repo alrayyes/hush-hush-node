@@ -24,30 +24,26 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    # wretry.action repackages the wrapped action's own outputs into one
-    # JSON blob at steps.release.outputs.outputs, rather than passing each
-    # one through under its own name - fromJSON unpacks it back out.
     outputs:
-      release_created: ${{ fromJSON(steps.release.outputs.outputs).release_created }}
-      tag_name: ${{ fromJSON(steps.release.outputs.outputs).tag_name }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      # release-please-action is a `uses:` step, so nick-fields/retry (which
-      # only runs a shell command) can't wrap it directly — wretry.action
-      # wraps another action's own uses:/with: instead. Retries a secondary
-      # GitHub API rate limit / abuse-detection response, which clears
-      # itself within seconds and has nothing to do with the token's hourly
-      # quota genuinely running out (rules/releases.md's "Retry a release
-      # job through GitHub's transient rate limit").
-      - uses: Wandalen/wretry.action@e68c23e6309f2871ca8ae4763e7629b9c258e1ea # v3.8.0
+      # Was Wandalen/wretry.action-wrapped for the transient-rate-limit
+      # retry rules/releases.md documents — dropped because that wrapper's
+      # nested-action composition doesn't actually invoke
+      # release-please-action at all under GitHub's forced Node 20->24
+      # runtime (2025-09-19 deprecation): the step reports success with
+      # zero output and no release PR ever appears. No fixed wretry.action
+      # release exists upstream (Wandalen/wretry.action#193, still open;
+      # the one PR attempting it, #194, closed unmerged). hush-hush-go#103
+      # has the diagnosis; re-add the wrapper once upstream ships a
+      # Node 24-compatible release.
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release
         with:
-          action: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7
-          with: |
-            token: ${{ secrets.RELEASE_TOKEN }}
-            config-file: release-please-config.json
-            manifest-file: .release-please-manifest.json
-          attempt_limit: 3
-          attempt_delay: 30000
+          token: ${{ secrets.RELEASE_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
 
   # npm Trusted Publishing: no NPM_TOKEN to hold or rotate. npmjs.com has a
   # trusted publisher configured for @hush-hush/sdk pointing at this exact
