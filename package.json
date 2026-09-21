@@ -53,21 +53,21 @@
     "smol-toml": "1.7.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.13",
+    "@biomejs/biome": "2.5.14",
     "@commitlint/cli": "21.2.2",
     "@commitlint/config-conventional": "21.2.2",
     "@pact-foundation/pact": "17.1.4",
-    "@types/node": "26.5.1",
-    "@vitest/coverage-v8": "5.0.0",
-    "lefthook": "2.1.12",
+    "@types/node": "26.6.1",
+    "@vitest/coverage-v8": "5.0.1",
+    "lefthook": "2.1.14",
     "markdownlint-cli2": "0.23.2",
     "openapi-typescript": "7.13.0",
-    "prettier": "3.9.6",
+    "prettier": "3.9.8",
     "sort-package-json": "4.0.0",
     "tsup": "8.5.1",
     "typedoc": "0.28.20",
     "typescript": "6.0.3",
-    "vitest": "5.0.0"
+    "vitest": "5.0.1"
   },
   "packageManager": "bun@1.4.0",
   "engines": {
