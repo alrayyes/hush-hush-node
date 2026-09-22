@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.0.6](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.0.5...sdk-v6.0.6) (2026-09-22)
+
+
+### Bug Fixes
+
+* regenerate client from updated hush-hush spec ([9da3613](https://github.com/alrayyes/hush-hush-node/commit/9da36137dd8b76a2a98c1925192b0ef095619b44))
+* regenerate client from updated hush-hush spec ([04d7fa3](https://github.com/alrayyes/hush-hush-node/commit/04d7fa368e96a26d91718723563ac2cdd58a0261))
+
 ## [6.0.5](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.0.4...sdk-v6.0.5) (2026-09-21)
 
 
