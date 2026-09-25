@@ -12,11 +12,13 @@
 # (rules/sdk-generation.md) — a session-scoped auto-merge grant this repo
 # was originally built under doesn't carry forward into permanent CI
 # behavior (CLAUDE.md's own scoping rule for a grant like that).
+#
+# No cron: Hush-Hush's release.yml fires repository_dispatch
+# (spec-updated) on every release, so a schedule fallback only added
+# noise once that path was proven working (alrayyes/Hush-Hush#224).
 name: codegen
 
 on:
-  schedule:
-    - cron: "0 6 * * *" # daily, 06:00 UTC
   workflow_dispatch:
   repository_dispatch:
     types: [spec-updated]
