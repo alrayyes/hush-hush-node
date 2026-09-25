@@ -1,0 +1,11 @@
+# Secret scanning for hush-hush-node.
+#
+# Extends the ruleset that ships with the pinned gitleaks version rather than
+# replacing it, so new upstream rules arrive with the version bump.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Fake audit-actor example token from the hush-hush OpenAPI spec's AuditActorOption schema, carried verbatim into generated docstrings"
+regexes = ['''^a1b2c3d4e5f6a7b8$''']
