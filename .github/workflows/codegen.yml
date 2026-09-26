@@ -1,17 +1,25 @@
 # Regenerates the client whenever hush-hush's spec moves, and opens a pull
-# request with the result — never pushes directly to main, and never
-# auto-merges it either. See design.md's "Versioning via spec diff" and
-# "Merge policy" decisions.
+# request with the result — never pushes directly to main. See design.md's
+# "Versioning via spec diff" and "Merge policy" decisions.
 #
 # oasdiff classifies the spec change as additive or breaking; that
 # classification becomes the commit/PR message's Conventional Commits bump
 # marker (fix: vs fix!: + BREAKING CHANGE:), so release-please computes the
-# right semver bump from a message a human never had to write, and stays
-# visible in the PR body for review either way. A regeneration PR gets real
-# review before merge regardless of that classification
-# (rules/sdk-generation.md) — a session-scoped auto-merge grant this repo
-# was originally built under doesn't carry forward into permanent CI
-# behavior (CLAUDE.md's own scoping rule for a grant like that).
+# right semver bump from a message a human never had to write.
+#
+# codegen-auto-merge.yml merges this once CI is green, on the account-wide
+# standing exception Ryan granted for this class of PR
+# (rules/sdk-generation.md's "Regeneration in CI" section) — oasdiff
+# already classified the spec diff into the commit type before this job
+# ever runs, so there's no further human judgment to add on top of that.
+# Matching go/php/python.
+#
+# "Check whether the spec actually moved" below diffs api/openapi.yaml's
+# own content, not the submodule pointer: the pointer advances on every
+# commit to hush-hush's main, most of which never touch the spec, and a
+# no-op regeneration (a diff of nothing but the embedded spec-commit
+# comment) would otherwise still open a PR, auto-merge, and cut a release
+# nobody asked for — confirmed live on alrayyes/hush-hush-node#153.
 #
 # No cron: Hush-Hush's release.yml fires repository_dispatch
 # (spec-updated) on every release, so a schedule fallback only added
@@ -47,16 +55,23 @@ jobs:
 
       - name: Record the spec commit this repo was last generated from
         id: before
-        run: echo "sha=$(git -C hush-hush rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "sha=$(git -C hush-hush rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "spec-blob=$(git -C hush-hush rev-parse HEAD:api/openapi.yaml)" >> "$GITHUB_OUTPUT"
 
       - name: Pull hush-hush's latest spec
         run: git submodule update --remote hush-hush
 
+      # Diffs api/openapi.yaml's own blob, not the submodule commit: the
+      # submodule pointer moves on every hush-hush commit, most of which
+      # never touch the spec, and comparing commit SHAs alone treated an
+      # unrelated main-branch change as a spec change every time.
       - name: Check whether the spec actually moved
         id: moved
         run: |
           after=$(git -C hush-hush rev-parse HEAD)
-          if [ "$after" = "${{ steps.before.outputs.sha }}" ]; then
+          after_spec=$(git -C hush-hush rev-parse HEAD:api/openapi.yaml)
+          if [ "$after_spec" = "${{ steps.before.outputs.spec-blob }}" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -125,12 +140,11 @@ jobs:
 
       # RELEASE_TOKEN, not the default GITHUB_TOKEN: a PR authored by
       # GITHUB_TOKEN sits at action_required with zero jobs run on every
-      # workflow triggered against it -- ci.yml included, so a human
-      # reviewing this regeneration has no CI signal at all until someone
-      # clicks "Approve and run". RELEASE_TOKEN authors it as a real
-      # collaborator instead, so checks actually run; this doesn't change
-      # this job's own no-auto-merge-without-review policy, only whether
-      # a reviewer can see real CI results.
+      # workflow triggered against it -- ci.yml included, so
+      # codegen-auto-merge.yml would arm auto-merge against a PR that
+      # never actually ran a single check. RELEASE_TOKEN authors it as a
+      # real collaborator instead, so checks actually run before that
+      # auto-merge can complete.
       - name: Open pull request
         if: steps.moved.outputs.changed == 'true'
         id: pr
