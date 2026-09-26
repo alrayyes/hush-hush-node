@@ -28,6 +28,12 @@ jobs:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile
       - run: bun run docs
+      # TypeDoc has no option to copy an arbitrary static file into its
+      # output root (checked its full --help against 0.28: --customCss/
+      # --customJs/--favicon/--cname each target one specific asset, and
+      # --projectDocuments renders markdown into an HTML page rather than
+      # copying it verbatim) — so llms.txt is copied in here instead.
+      - run: cp llms.txt site/llms.txt
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site

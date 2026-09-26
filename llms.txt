@@ -1,0 +1,25 @@
+# hush-hush-node
+
+> Official Node.js/TypeScript SDK for hush-hush, a sealed-secret object
+> store with an audit log, generated from its OpenAPI spec. This site is
+> the TypeDoc-generated API reference for the `@hush-hush/sdk` package.
+
+The SDK exposes a single `Client` class for creating, reading, updating and
+deleting sealed objects, querying who accessed them and when, and checking
+what else references a given object. Reads need no credential; writes need
+an API key. The package ships both ESM and CommonJS builds and targets
+Node.js 22+.
+
+## Docs
+
+- [API reference index](https://alrayyes.github.io/hush-hush-node/): Module overview and the project README.
+- [Client](https://alrayyes.github.io/hush-hush-node/classes/Client.html): The SDK's entry point — createObject, getObject, updateObject, deleteObject, usedBy, queryAuditLog.
+- [ClientOptions](https://alrayyes.github.io/hush-hush-node/interfaces/ClientOptions.html): Constructor options, including the API key.
+- [APIError](https://alrayyes.github.io/hush-hush-node/classes/APIError.html): Error thrown for a failed API call.
+- [HushHushError](https://alrayyes.github.io/hush-hush-node/classes/HushHushError.html): Base error class for the SDK.
+
+## Optional
+
+- [GitHub repository](https://github.com/alrayyes/hush-hush-node): Source, issue tracker, CONTRIBUTING.md.
+- [npm package](https://www.npmjs.com/package/@hush-hush/sdk): Install instructions and version history.
+- [hush-hush](https://github.com/alrayyes/hush-hush): The service this SDK is generated against.
