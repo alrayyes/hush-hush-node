@@ -1,8 +1,7 @@
 # codegen.yml opens a regeneration pull request whenever hush-hush's spec
-# moves but never merges it -- Ryan granted a durable, account-wide
-# standing exception for this class of PR on 2026-09-21, now written down
-# in rules/sdk-generation.md's "Regeneration in CI" section
-# (alrayyes/dotfiles#629) rather than only asserted in comments here: merge
+# moves but never merges it -- merging is the account-wide standing
+# exception rules/sdk-generation.md's "Regeneration in CI" section
+# documents (Ryan, 2026-09-26), not only asserted in comments here: merge
 # once CI is green, the same way a Renovate/Dependabot/release-please PR
 # already does, whether oasdiff classified the underlying spec change as
 # additive or breaking -- there's no human judgment left to add on top of
