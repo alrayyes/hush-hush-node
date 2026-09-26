@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.0.12...sdk-v6.1.0) (2026-09-26)
+
+
+### Features
+
+* **docs:** serve llms.txt from the published API reference site ([49f677d](https://github.com/alrayyes/hush-hush-node/commit/49f677d42c833a7de58dd320412ebd2bb02ee9c1))
+* **docs:** serve llms.txt from the published API reference site ([73b9d8e](https://github.com/alrayyes/hush-hush-node/commit/73b9d8e7894e5f439ccc46c28b313f9b82413117)), closes [#154](https://github.com/alrayyes/hush-hush-node/issues/154)
+
 ## [6.0.12](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.0.11...sdk-v6.0.12) (2026-09-25)
 
 
