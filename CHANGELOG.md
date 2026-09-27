@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.2.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.1.3...sdk-v6.2.0) (2026-09-27)
+
+
+### Features
+
+* **client:** add typed consumer-registry methods ([1379c52](https://github.com/alrayyes/hush-hush-node/commit/1379c523a29c32d7c125666dd547cc396c8dd6b1))
+* **client:** add typed consumer-registry methods ([2d141bf](https://github.com/alrayyes/hush-hush-node/commit/2d141bf9cbd65e7088af0c0d69b93d457c773d46)), closes [#162](https://github.com/alrayyes/hush-hush-node/issues/162)
+
+
+### Bug Fixes
+
+* **client:** require a credential for listConsumers ([93cde9d](https://github.com/alrayyes/hush-hush-node/commit/93cde9d5fd5288f68aa216e5bd9d6847dddfe09d))
+
 ## [6.1.3](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.1.2...sdk-v6.1.3) (2026-09-27)
 
 
