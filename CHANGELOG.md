@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.2](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.1.1...sdk-v6.1.2) (2026-09-27)
+
+
+### Bug Fixes
+
+* **hooks:** check package.json sort order at pre-push ([f98f1de](https://github.com/alrayyes/hush-hush-node/commit/f98f1dec5be91c450e52419c570ecd562c226e63))
+* **hooks:** check package.json sort order at pre-push ([de9b004](https://github.com/alrayyes/hush-hush-node/commit/de9b00494e71ab08d6a7f99bb9861ab08d591960)), closes [#163](https://github.com/alrayyes/hush-hush-node/issues/163)
+
 ## [6.1.1](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.1.0...sdk-v6.1.1) (2026-09-27)
 
 
