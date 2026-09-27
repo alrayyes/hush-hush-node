@@ -3,7 +3,11 @@ export type {
   AuditLogEntry,
   AuditLogFilter,
   ClientOptions,
+  ConsumerEntry,
+  ConsumersPage,
+  ConsumersResult,
   Health,
+  ListConsumersFilter,
   ObjectMetadata,
   UsedBy,
 } from "./client.js";

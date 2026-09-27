@@ -153,6 +153,88 @@ describe("Audit log query", () => {
   });
 });
 
+describe("Consumer registry", () => {
+  it("lists consumer names with no filter", async () => {
+    const { fetch, requests } = createFakeFetch([
+      { status: 200, body: JSON.stringify(["homelab/vps-docker", "repo/a"]) },
+    ]);
+    const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
+
+    const result = await client.listConsumers();
+
+    expect(result).toEqual(["homelab/vps-docker", "repo/a"]);
+    expect(requests[0]?.headers.get("authorization")).toBe("Bearer token");
+    expect(new URL(requests[0]?.url ?? "").search).toBe("");
+  });
+
+  it("lists a page of consumers, some with a registered key and some without", async () => {
+    const page = {
+      consumers: [
+        { name: "homelab/vps-docker", secret_count: 3, public_key: "age1examplekey" },
+        { name: "repo/a", secret_count: 1 },
+      ],
+      total: 2,
+    };
+    const { fetch, requests } = createFakeFetch([{ status: 200, body: JSON.stringify(page) }]);
+    const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
+
+    const result = await client.listConsumers({ q: "a", page: 1, pageSize: 10 });
+
+    expect(result).toEqual(page);
+    const url = new URL(requests[0]?.url ?? "");
+    expect(url.searchParams.get("q")).toBe("a");
+    expect(url.searchParams.get("page")).toBe("1");
+    expect(url.searchParams.get("page_size")).toBe("10");
+  });
+
+  it("adds a consumer", async () => {
+    const { fetch, requests } = createFakeFetch([
+      { status: 201, body: JSON.stringify({ name: "homelab/new-device", secret_count: 0 }) },
+    ]);
+    const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
+
+    const result = await client.addConsumer("homelab/new-device");
+
+    expect(result).toEqual({ name: "homelab/new-device", secret_count: 0 });
+    expect(requests[0]?.method).toBe("POST");
+    expect(JSON.parse(requests[0]?.body ?? "{}")).toEqual({ name: "homelab/new-device" });
+  });
+
+  it("registers a consumer's public key without renaming it", async () => {
+    const { fetch, requests } = createFakeFetch([
+      {
+        status: 200,
+        body: JSON.stringify({
+          name: "homelab/vps-docker",
+          secret_count: 3,
+          public_key: "age1examplekey",
+        }),
+      },
+    ]);
+    const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
+
+    const result = await client.updateConsumer("homelab/vps-docker", {
+      publicKey: "age1examplekey",
+    });
+
+    expect(result.public_key).toBe("age1examplekey");
+    expect(requests[0]?.method).toBe("PATCH");
+    expect(JSON.parse(requests[0]?.body ?? "{}")).toEqual({ public_key: "age1examplekey" });
+    // Sent unencoded, not URL-escaped, even though the name contains "/".
+    expect(requests[0]?.url).toBe("https://hush-hush.test/consumers/homelab/vps-docker");
+  });
+
+  it("deletes a consumer", async () => {
+    const { fetch, requests } = createFakeFetch([{ status: 204 }]);
+    const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
+
+    await client.deleteConsumer("homelab/vps-docker");
+
+    expect(requests[0]?.method).toBe("DELETE");
+    expect(requests[0]?.url).toBe("https://hush-hush.test/consumers/homelab/vps-docker");
+  });
+});
+
 describe("Typed error mapping", () => {
   it("raises a typed error with status and parsed body for a non-retryable 4xx", async () => {
     const { fetch } = createFakeFetch([

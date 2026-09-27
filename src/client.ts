@@ -1,11 +1,13 @@
 import { APIError } from "./errors.js";
-import type { components } from "./generated/types.js";
+import type { components, operations } from "./generated/types.js";
 import { DEFAULT_MAX_RETRIES, fetchWithRetry } from "./retry.js";
 
 type _ObjectMetadata = components["schemas"]["ObjectMetadata"];
 type _UsedBy = components["schemas"]["UsedBy"];
 type _Health = components["schemas"]["Health"];
 type _AuditLogEntry = components["schemas"]["AuditLogEntry"];
+type _ConsumerEntry = components["schemas"]["ConsumerEntry"];
+type _ConsumersPage = components["schemas"]["ConsumersPage"];
 
 /** An object's slug and its recorded consumers. */
 export interface ObjectMetadata extends _ObjectMetadata {}
@@ -17,6 +19,17 @@ export interface Health extends _Health {}
 export interface AuditLogEntry extends _AuditLogEntry {}
 /** The kind of call an {@link AuditLogEntry} recorded. */
 export type AuditLogAction = AuditLogEntry["action"];
+/** A distinct consumer, its secret count, and its registered public key (if any). */
+export interface ConsumerEntry extends _ConsumerEntry {}
+/** One page of {@link ConsumerEntry} results, plus the total matching count. */
+export interface ConsumersPage extends _ConsumersPage {}
+/**
+ * {@link Client.listConsumers}'s response shape: the plain, unpaginated
+ * array of every distinct consumer name when called with no filter, or a
+ * {@link ConsumersPage} when called with any of `q`/`page`/`pageSize`.
+ */
+export type ConsumersResult =
+  operations["listConsumers"]["responses"][200]["content"]["application/json"];
 
 const API_KEY_ENV_VAR = "HUSH_HUSH_API_KEY";
 const DEFAULT_TIMEOUT_MS = 30_000;
@@ -47,6 +60,16 @@ export interface AuditLogFilter {
   from?: string;
   /** Restrict to entries at or before this ISO-8601 timestamp. */
   to?: string;
+}
+
+/** Optional filters for {@link Client.listConsumers}. Giving any of these switches the response from a plain name array to a {@link ConsumersPage}. */
+export interface ListConsumersFilter {
+  /** Restrict to consumers whose name contains this substring, case-insensitive. */
+  q?: string;
+  /** 1-based page number. */
+  page?: number;
+  /** Maximum consumers per page. Defaults to 20, capped at 100. */
+  pageSize?: number;
 }
 
 interface RequestOptions {
@@ -178,6 +201,93 @@ export class Client {
   async getObjectUsedBy(slug: string): Promise<UsedBy> {
     const response = await this.request("GET", `/objects/${encodeURIComponent(slug)}/used-by`);
     return (await response.json()) as UsedBy;
+  }
+
+  /**
+   * Lists recorded consumer names. Requires a credential — unlike every
+   * other read in this client, listing needs no id the caller already
+   * holds, so it's gated the same way `GET /objects` is.
+   *
+   * Called with no filter, resolves with the plain, unpaginated array of
+   * every distinct consumer name — hush-hush's own consumer-combobox call
+   * site depends on this shape staying unchanged. Given any of `q`,
+   * `page`, or `pageSize`, resolves with a {@link ConsumersPage} instead:
+   * one page of matching consumers, each with its secret count and
+   * registered public key (if any), plus the total matching count.
+   *
+   * @param filter - Optional name substring and pagination.
+   */
+  async listConsumers(filter: ListConsumersFilter = {}): Promise<ConsumersResult> {
+    const response = await this.request("GET", "/consumers", {
+      authenticated: true,
+      query: {
+        q: filter.q,
+        page: filter.page?.toString(),
+        page_size: filter.pageSize?.toString(),
+      },
+    });
+    return (await response.json()) as ConsumersResult;
+  }
+
+  /**
+   * Adds a consumer to the directory with no secret referencing it yet.
+   * Requires a credential.
+   *
+   * @param name - The consumer's name.
+   * @throws {APIError} If the server responds with anything other than 201 (e.g. 409 if it already exists).
+   */
+  async addConsumer(name: string): Promise<ConsumerEntry> {
+    const response = await this.request("POST", "/consumers", {
+      authenticated: true,
+      jsonBody: { name },
+    });
+    return (await response.json()) as ConsumerEntry;
+  }
+
+  /**
+   * Renames a consumer and/or registers its age public key. At least one
+   * of `options.newName` or `options.publicKey` is required; the one left
+   * out leaves that aspect of the consumer unchanged. There's no way to
+   * clear a registered key through this call, only to set or replace one.
+   * Requires a credential.
+   *
+   * @param name - The consumer's current recorded name.
+   * @param options.newName - The consumer's new name. If it already matches another recorded consumer, the two merge.
+   * @param options.publicKey - The age public key to register or replace on the (possibly just-renamed) consumer.
+   * @throws {APIError} If the server responds with anything other than 200 (e.g. 404 if `name` is unrecorded).
+   */
+  async updateConsumer(
+    name: string,
+    options: { newName?: string; publicKey?: string } = {},
+  ): Promise<ConsumerEntry> {
+    // `name` is sent unencoded here too — see deleteConsumer's comment.
+    const response = await this.request("PATCH", `/consumers/${name}`, {
+      authenticated: true,
+      jsonBody: {
+        ...(options.newName !== undefined ? { name: options.newName } : {}),
+        ...(options.publicKey !== undefined ? { public_key: options.publicKey } : {}),
+      },
+    });
+    return (await response.json()) as ConsumerEntry;
+  }
+
+  /**
+   * Removes a consumer from every object that references it. The objects
+   * themselves aren't touched otherwise, and none are deleted even if this
+   * empties their `used_by` list. Requires a credential.
+   *
+   * @param name - The consumer's recorded name.
+   * @throws {APIError} If the server responds with anything other than 204 (e.g. 404 if unrecorded).
+   */
+  async deleteConsumer(name: string): Promise<void> {
+    // Unlike every other path segment in this client, `name` is sent
+    // unencoded on purpose: the server matches everything after
+    // `/consumers/` verbatim, including a literal `/` (names routinely
+    // look like `homelab/vps-docker`) — encodeURIComponent here would
+    // %2F-escape that and send a name the server no longer recognizes.
+    await this.request("DELETE", `/consumers/${name}`, {
+      authenticated: true,
+    });
   }
 
   /**

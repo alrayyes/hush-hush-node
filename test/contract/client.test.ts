@@ -48,4 +48,24 @@ describe.skipIf(!baseUrl)("contract", () => {
     const entries = await client.queryAuditLog({ objectId: "contract-test-object" });
     expect(entries).toBeInstanceOf(Array);
   });
+
+  it("adds, lists, updates, and removes a consumer", async () => {
+    const added = await client.addConsumer("contract-test-consumer");
+    expect(typeof added.name).toBe("string");
+
+    const names = await client.listConsumers();
+    expect(names).toBeInstanceOf(Array);
+
+    // Prism serves one static example per status regardless of query
+    // params, so it can't reproduce the real server's array-vs-page
+    // switch — this only proves the filtered request shape is accepted.
+    await client.listConsumers({ q: "contract-test-consumer", page: 1, pageSize: 10 });
+
+    const updated = await client.updateConsumer("contract-test-consumer", {
+      publicKey: "age1exampleplaceholderpublickey",
+    });
+    expect(typeof updated.name).toBe("string");
+
+    await client.deleteConsumer("contract-test-consumer");
+  });
 });
