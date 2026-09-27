@@ -7,7 +7,7 @@ type _UsedBy = components["schemas"]["UsedBy"];
 type _Health = components["schemas"]["Health"];
 type _AuditLogEntry = components["schemas"]["AuditLogEntry"];
 
-/** An object's id and its recorded consumers. */
+/** An object's slug and its recorded consumers. */
 export interface ObjectMetadata extends _ObjectMetadata {}
 /** The consumers (repos or hosts) recorded as depending on an object. */
 export interface UsedBy extends _UsedBy {}
@@ -92,16 +92,16 @@ export class Client {
   }
 
   /**
-   * Stores an already-sealed value under a new object id. Requires a credential.
+   * Stores an already-sealed value under a new object slug. Requires a credential.
    *
-   * @param id - The new object's id. Must match hush-hush's id pattern (lowercase alphanumeric, `-`/`_`).
+   * @param slug - The new object's slug. Must match hush-hush's slug pattern (lowercase alphanumeric, `-`/`_`).
    * @param value - The already-sealed (encrypted) value. This SDK never encrypts or decrypts anything.
    * @param options.usedBy - Consumers (repos or hosts) recorded as depending on this object.
    * @param options.caller - Recorded in the audit log as the calling program's self-reported identity.
-   * @throws {APIError} If the server responds with anything other than 201 (e.g. 409 if the id exists).
+   * @throws {APIError} If the server responds with anything other than 201 (e.g. 409 if the slug exists).
    */
   async createObject(
-    id: string,
+    slug: string,
     value: Uint8Array,
     options: { usedBy?: string[]; caller?: string } = {},
   ): Promise<ObjectMetadata> {
@@ -109,7 +109,7 @@ export class Client {
       authenticated: true,
       caller: options.caller,
       jsonBody: {
-        id,
+        slug,
         value: base64Encode(value),
         ...(options.usedBy !== undefined ? { used_by: options.usedBy } : {}),
       },
@@ -121,32 +121,32 @@ export class Client {
    * Fetches an object's sealed ciphertext exactly as stored — this SDK never
    * decrypts it, the same as the server. Needs no credential.
    *
-   * @param id - The object's id.
+   * @param slug - The object's slug.
    * @param options.caller - Recorded in the audit log as the calling program's self-reported identity.
    * @throws {APIError} If the server responds with anything other than 200 (e.g. 404).
    */
-  async getObject(id: string, options: { caller?: string } = {}): Promise<Uint8Array> {
-    const response = await this.request("GET", `/objects/${encodeURIComponent(id)}`, {
+  async getObject(slug: string, options: { caller?: string } = {}): Promise<Uint8Array> {
+    const response = await this.request("GET", `/objects/${encodeURIComponent(slug)}`, {
       caller: options.caller,
     });
     return new Uint8Array(await response.arrayBuffer());
   }
 
   /**
-   * Replaces the stored ciphertext for an existing object. The object's id
+   * Replaces the stored ciphertext for an existing object. The object's slug
    * and used-by metadata are unchanged. Requires a credential.
    *
-   * @param id - The existing object's id.
+   * @param slug - The existing object's slug.
    * @param value - The new already-sealed (encrypted) value.
    * @param options.caller - Recorded in the audit log as the calling program's self-reported identity.
    * @throws {APIError} If the server responds with anything other than 200 (e.g. 401 or 404).
    */
   async updateObject(
-    id: string,
+    slug: string,
     value: Uint8Array,
     options: { caller?: string } = {},
   ): Promise<ObjectMetadata> {
-    const response = await this.request("PUT", `/objects/${encodeURIComponent(id)}`, {
+    const response = await this.request("PUT", `/objects/${encodeURIComponent(slug)}`, {
       authenticated: true,
       caller: options.caller,
       jsonBody: { value: base64Encode(value) },
@@ -155,14 +155,14 @@ export class Client {
   }
 
   /**
-   * Permanently removes an object. A subsequent fetch by this id returns 404. Requires a credential.
+   * Permanently removes an object. A subsequent fetch by this slug returns 404. Requires a credential.
    *
-   * @param id - The object's id.
+   * @param slug - The object's slug.
    * @param options.caller - Recorded in the audit log as the calling program's self-reported identity.
    * @throws {APIError} If the server responds with anything other than 204 (e.g. 401 or 404).
    */
-  async deleteObject(id: string, options: { caller?: string } = {}): Promise<void> {
-    await this.request("DELETE", `/objects/${encodeURIComponent(id)}`, {
+  async deleteObject(slug: string, options: { caller?: string } = {}): Promise<void> {
+    await this.request("DELETE", `/objects/${encodeURIComponent(slug)}`, {
       authenticated: true,
       caller: options.caller,
     });
@@ -172,11 +172,11 @@ export class Client {
    * Returns the recorded list of consumers for an object — the "what
    * depends on this" mapping set at creation. Needs no credential.
    *
-   * @param id - The object's id.
+   * @param slug - The object's slug.
    * @throws {APIError} If the server responds with anything other than 200 (e.g. 404).
    */
-  async getObjectUsedBy(id: string): Promise<UsedBy> {
-    const response = await this.request("GET", `/objects/${encodeURIComponent(id)}/used-by`);
+  async getObjectUsedBy(slug: string): Promise<UsedBy> {
+    const response = await this.request("GET", `/objects/${encodeURIComponent(slug)}/used-by`);
     return (await response.json()) as UsedBy;
   }
 
