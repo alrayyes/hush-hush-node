@@ -15,7 +15,7 @@ describe("Client construction", () => {
   it("uses HUSH_HUSH_API_KEY from the environment when no credential is given", async () => {
     process.env[ENV_VAR] = "env-token";
     const { fetch, requests } = createFakeFetch([
-      { status: 201, body: JSON.stringify({ id: "x" }) },
+      { status: 201, body: JSON.stringify({ slug: "x" }) },
     ]);
     const client = new Client("https://hush-hush.test", { fetch });
 
@@ -27,7 +27,7 @@ describe("Client construction", () => {
   it("uses an explicit credential over the environment variable", async () => {
     process.env[ENV_VAR] = "env-token";
     const { fetch, requests } = createFakeFetch([
-      { status: 201, body: JSON.stringify({ id: "x" }) },
+      { status: 201, body: JSON.stringify({ slug: "x" }) },
     ]);
     const client = new Client("https://hush-hush.test", { apiKey: "explicit-token", fetch });
 
@@ -44,7 +44,7 @@ describe("Typed resource operations", () => {
 
   it("sends a typed create request and returns a typed response", async () => {
     const { fetch, requests } = createFakeFetch([
-      { status: 201, body: JSON.stringify({ id: "my-object", used_by: ["repo/a"] }) },
+      { status: 201, body: JSON.stringify({ slug: "my-object", used_by: ["repo/a"] }) },
     ]);
     const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
 
@@ -52,10 +52,10 @@ describe("Typed resource operations", () => {
       usedBy: ["repo/a"],
     });
 
-    expect(result).toEqual({ id: "my-object", used_by: ["repo/a"] });
+    expect(result).toEqual({ slug: "my-object", used_by: ["repo/a"] });
     expect(requests[0]?.method).toBe("POST");
     expect(JSON.parse(requests[0]?.body ?? "{}")).toEqual({
-      id: "my-object",
+      slug: "my-object",
       value: Buffer.from([1, 2, 3]).toString("base64"),
       used_by: ["repo/a"],
     });
@@ -118,13 +118,13 @@ describe("Health, update, and delete", () => {
 
   it("replaces an object's value", async () => {
     const { fetch, requests } = createFakeFetch([
-      { status: 200, body: JSON.stringify({ id: "my-object" }) },
+      { status: 200, body: JSON.stringify({ slug: "my-object" }) },
     ]);
     const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
 
     const result = await client.updateObject("my-object", new Uint8Array([9]));
 
-    expect(result).toEqual({ id: "my-object" });
+    expect(result).toEqual({ slug: "my-object" });
     expect(requests[0]?.method).toBe("PUT");
   });
 

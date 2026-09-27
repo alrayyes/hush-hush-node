@@ -28,13 +28,13 @@ describe.skipIf(!baseUrl)("contract", () => {
       usedBy: ["contract-test"],
       caller: "hush-hush-node-contract-test",
     });
-    expect(typeof created.id).toBe("string");
+    expect(typeof created.slug).toBe("string");
 
     const fetched = await client.getObject("contract-test-object");
     expect(fetched).toBeInstanceOf(Uint8Array);
 
     const updated = await client.updateObject("contract-test-object", new Uint8Array([4, 5, 6]));
-    expect(typeof updated.id).toBe("string");
+    expect(typeof updated.slug).toBe("string");
 
     await client.deleteObject("contract-test-object");
   });
