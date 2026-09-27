@@ -158,11 +158,12 @@ describe("Consumer registry", () => {
     const { fetch, requests } = createFakeFetch([
       { status: 200, body: JSON.stringify(["homelab/vps-docker", "repo/a"]) },
     ]);
-    const client = new Client("https://hush-hush.test", { fetch });
+    const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
 
     const result = await client.listConsumers();
 
     expect(result).toEqual(["homelab/vps-docker", "repo/a"]);
+    expect(requests[0]?.headers.get("authorization")).toBe("Bearer token");
     expect(new URL(requests[0]?.url ?? "").search).toBe("");
   });
 
@@ -175,7 +176,7 @@ describe("Consumer registry", () => {
       total: 2,
     };
     const { fetch, requests } = createFakeFetch([{ status: 200, body: JSON.stringify(page) }]);
-    const client = new Client("https://hush-hush.test", { fetch });
+    const client = new Client("https://hush-hush.test", { apiKey: "token", fetch });
 
     const result = await client.listConsumers({ q: "a", page: 1, pageSize: 10 });
 

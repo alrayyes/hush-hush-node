@@ -52,9 +52,9 @@ await client.addConsumer("homelab/new-device");
 await client.updateConsumer("homelab/new-device", { publicKey: "age1..." });
 ```
 
-The API key is only required for write operations (create/update/delete,
-plus adding/updating/deleting a consumer); reads (get, used-by,
-audit-log query, list consumers) work without one. A per-call `caller`
+The API key is required for write operations (create/update/delete, plus
+adding/updating/deleting a consumer) and for listing consumers; every
+other read (get, used-by, audit-log query) works without one. A per-call `caller`
 option, accepted by create/get/update/delete, is optional. The package
 ships both ESM and CommonJS builds. See the
 [full API reference](https://alrayyes.github.io/hush-hush-node/) for

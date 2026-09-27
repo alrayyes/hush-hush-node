@@ -204,7 +204,9 @@ export class Client {
   }
 
   /**
-   * Lists recorded consumer names. Needs no credential.
+   * Lists recorded consumer names. Requires a credential — unlike every
+   * other read in this client, listing needs no id the caller already
+   * holds, so it's gated the same way `GET /objects` is.
    *
    * Called with no filter, resolves with the plain, unpaginated array of
    * every distinct consumer name — hush-hush's own consumer-combobox call
@@ -217,6 +219,7 @@ export class Client {
    */
   async listConsumers(filter: ListConsumersFilter = {}): Promise<ConsumersResult> {
     const response = await this.request("GET", "/consumers", {
+      authenticated: true,
       query: {
         q: filter.q,
         page: filter.page?.toString(),
