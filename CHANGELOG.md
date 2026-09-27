@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.3](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.1.2...sdk-v6.1.3) (2026-09-27)
+
+
+### Bug Fixes
+
+* **ci:** skip the prepare script in every bun install ([b8f80ff](https://github.com/alrayyes/hush-hush-node/commit/b8f80ff278f916d05e928f42b424ebe2d48c9855))
+* **ci:** skip the prepare script in every bun install ([42696b1](https://github.com/alrayyes/hush-hush-node/commit/42696b12fa58d9de84602abff3f876ebc0fd39a5)), closes [#166](https://github.com/alrayyes/hush-hush-node/issues/166)
+
 ## [6.1.2](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.1.1...sdk-v6.1.2) (2026-09-27)
 
 
