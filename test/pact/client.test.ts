@@ -65,4 +65,37 @@ describe("pact", () => {
       }
     });
   });
+
+  it("registers a consumer's public key", async () => {
+    const { like } = MatchersV3;
+
+    pact
+      .given("a consumer named homelab/vps-docker exists")
+      .uponReceiving("a request to register a consumer's public key")
+      .withRequest({
+        method: "PATCH",
+        path: "/consumers/homelab/vps-docker",
+        headers: { "Content-Type": "application/json" },
+        body: { public_key: "age1exampleplaceholderpublickey" },
+      })
+      .willRespondWith({
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+        body: {
+          name: "homelab/vps-docker",
+          secret_count: like(3),
+          public_key: "age1exampleplaceholderpublickey",
+        },
+      });
+
+    await pact.executeTest(async (mockServer) => {
+      const client = new Client(mockServer.url, { apiKey: "token" });
+      const updated = await client.updateConsumer("homelab/vps-docker", {
+        publicKey: "age1exampleplaceholderpublickey",
+      });
+      if (updated.public_key !== "age1exampleplaceholderpublickey") {
+        throw new Error(`expected the registered public key back, got ${updated.public_key}`);
+      }
+    });
+  });
 });

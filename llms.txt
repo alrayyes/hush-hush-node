@@ -5,15 +5,15 @@
 > the TypeDoc-generated API reference for the `@hush-hush/sdk` package.
 
 The SDK exposes a single `Client` class for creating, reading, updating and
-deleting sealed objects, querying who accessed them and when, and checking
-what else references a given object. Reads need no credential; writes need
-an API key. The package ships both ESM and CommonJS builds and targets
-Node.js 22+.
+deleting sealed objects, querying who accessed them and when, checking what
+else references a given object, and managing the consumer registry those
+references point at. Reads need no credential; writes need an API key. The
+package ships both ESM and CommonJS builds and targets Node.js 22+.
 
 ## Docs
 
 - [API reference index](https://alrayyes.github.io/hush-hush-node/): Module overview and the project README.
-- [Client](https://alrayyes.github.io/hush-hush-node/classes/Client.html): The SDK's entry point — createObject, getObject, updateObject, deleteObject, usedBy, queryAuditLog.
+- [Client](https://alrayyes.github.io/hush-hush-node/classes/Client.html): The SDK's entry point — createObject, getObject, updateObject, deleteObject, usedBy, queryAuditLog, listConsumers, addConsumer, updateConsumer, deleteConsumer.
 - [ClientOptions](https://alrayyes.github.io/hush-hush-node/interfaces/ClientOptions.html): Constructor options, including the API key.
 - [APIError](https://alrayyes.github.io/hush-hush-node/classes/APIError.html): Error thrown for a failed API call.
 - [HushHushError](https://alrayyes.github.io/hush-hush-node/classes/HushHushError.html): Base error class for the SDK.

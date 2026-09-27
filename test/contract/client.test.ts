@@ -48,4 +48,22 @@ describe.skipIf(!baseUrl)("contract", () => {
     const entries = await client.queryAuditLog({ objectId: "contract-test-object" });
     expect(entries).toBeInstanceOf(Array);
   });
+
+  it("adds, lists, updates, and removes a consumer", async () => {
+    const added = await client.addConsumer("contract-test-consumer");
+    expect(added.name).toBe("contract-test-consumer");
+
+    const names = await client.listConsumers();
+    expect(names).toBeInstanceOf(Array);
+
+    const page = await client.listConsumers({ q: "contract-test-consumer" });
+    expect(page).not.toBeInstanceOf(Array);
+
+    const updated = await client.updateConsumer("contract-test-consumer", {
+      publicKey: "age1exampleplaceholderpublickey",
+    });
+    expect(typeof updated.name).toBe("string");
+
+    await client.deleteConsumer("contract-test-consumer");
+  });
 });
