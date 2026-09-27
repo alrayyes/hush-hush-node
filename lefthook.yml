@@ -53,6 +53,9 @@ pre-push:
     - name: lint:md
       run: bun run lint:md
 
+    - name: sort-package-json
+      run: bun run sort-package-json:check
+
     - name: vale
       run: ./scripts/lint-vale.sh
 

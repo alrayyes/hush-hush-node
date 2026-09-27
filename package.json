@@ -43,6 +43,8 @@
     "lint:fix": "biome check --write .",
     "lint:md": "markdownlint-cli2 \"**/*.md\"",
     "prepare": "lefthook install",
+    "sort-package-json": "sort-package-json",
+    "sort-package-json:check": "sort-package-json --check",
     "test": "vitest run test/unit --coverage",
     "test:contract": "vitest run test/contract",
     "test:e2e": "vitest run test/e2e",
