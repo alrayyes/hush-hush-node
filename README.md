@@ -33,8 +33,9 @@ await client.createObject(
   new TextEncoder().encode("already-sealed-ciphertext"),
 );
 
-// Get needs no credential — hush-hush's confidentiality boundary is
-// "who holds a matching private key," not who's calling this endpoint.
+// Get needs a credential too - the apiKey above works (a write credential
+// already reads any object, unrestricted), or a narrower consumer read
+// token via readToken/HUSH_HUSH_READ_TOKEN when that's all you're given.
 const value = await client.getObject("my-first-secret");
 console.log(`got ${value.byteLength} bytes of sealed ciphertext`);
 
@@ -53,10 +54,14 @@ await client.updateConsumer("homelab/new-device", { publicKey: "age1..." });
 ```
 
 The API key is required for write operations (create/update/delete, plus
-adding/updating/deleting a consumer) and for listing consumers; every
-other read (get, used-by, audit-log query) works without one. A per-call `caller`
-option, accepted by create/get/update/delete, is optional. The package
-ships both ESM and CommonJS builds. See the
+adding/updating/deleting a consumer), for listing consumers, and — unless
+a narrower `readToken` is set instead — for `getObject`; every other read
+(used-by, audit-log query) works without one. `readToken` (or
+`HUSH_HUSH_READ_TOKEN`) is only consulted when `apiKey` isn't set, and
+only ever changes what `getObject` sends - hush-hush scopes it to
+whichever consumer it's bound to, via the object's own recorded
+`usedBy`. A per-call `caller` option, accepted by create/get/update/delete,
+is optional. The package ships both ESM and CommonJS builds. See the
 [full API reference](https://alrayyes.github.io/hush-hush-node/) for
 everything else.
 

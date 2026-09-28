@@ -32,16 +32,28 @@ export type ConsumersResult =
   operations["listConsumers"]["responses"][200]["content"]["application/json"];
 
 const API_KEY_ENV_VAR = "HUSH_HUSH_API_KEY";
+const READ_TOKEN_ENV_VAR = "HUSH_HUSH_READ_TOKEN";
 const DEFAULT_TIMEOUT_MS = 30_000;
 
 /** Options accepted by the {@link Client} constructor. */
 export interface ClientOptions {
   /**
-   * Bearer credential for write paths (create/update/delete). Falls back to
-   * the `HUSH_HUSH_API_KEY` environment variable when not supplied. Read
-   * paths (get, used-by, audit-log query) need no credential at all.
+   * Bearer credential for write paths (create/update/delete) and for
+   * listing consumers. Falls back to the `HUSH_HUSH_API_KEY` environment
+   * variable when not supplied. Also used for {@link Client.getObject}
+   * when no `readToken` is set - a write credential already reads any
+   * object, unrestricted.
    */
   apiKey?: string;
+  /**
+   * Bearer credential for {@link Client.getObject}, scoped by hush-hush to
+   * whichever consumer the token is bound to. Falls back to the
+   * `HUSH_HUSH_READ_TOKEN` environment variable when not supplied, and is
+   * only consulted when `apiKey` isn't set - a write credential already
+   * grants unrestricted reads, so there's nothing for a narrower read
+   * token to add on top of it.
+   */
+  readToken?: string;
   /** Per-request timeout, in milliseconds. Defaults to 30000. */
   timeoutMs?: number;
   /** Maximum retry attempts for network failures and 5xx/429 responses. Defaults to 3. */
@@ -74,6 +86,8 @@ export interface ListConsumersFilter {
 
 interface RequestOptions {
   authenticated?: boolean;
+  /** Sends `apiKey ?? readToken` - see {@link Client.getObject}'s own doc comment. */
+  readCredential?: boolean;
   caller?: string | undefined;
   query?: Record<string, string | undefined>;
   body?: RequestInit["body"];
@@ -92,6 +106,7 @@ interface RequestOptions {
 export class Client {
   private readonly baseUrl: string;
   private readonly apiKey: string | undefined;
+  private readonly readToken: string | undefined;
   private readonly timeoutMs: number;
   private readonly maxRetries: number;
   private readonly fetchImpl: typeof fetch;
@@ -103,6 +118,7 @@ export class Client {
   constructor(baseUrl: string, options: ClientOptions = {}) {
     this.baseUrl = baseUrl.replace(/\/+$/, "");
     this.apiKey = options.apiKey ?? process.env[API_KEY_ENV_VAR];
+    this.readToken = options.readToken ?? process.env[READ_TOKEN_ENV_VAR];
     this.timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
     this.maxRetries = options.maxRetries ?? DEFAULT_MAX_RETRIES;
     this.fetchImpl = options.fetch ?? fetch;
@@ -142,14 +158,18 @@ export class Client {
 
   /**
    * Fetches an object's sealed ciphertext exactly as stored — this SDK never
-   * decrypts it, the same as the server. Needs no credential.
+   * decrypts it, the same as the server. Requires a credential: `apiKey` if
+   * set, otherwise `readToken` - hush-hush accepts either a write bearer
+   * token (unrestricted) or a consumer read token (scoped to whichever
+   * consumer it's bound to, via the object's own recorded `usedBy`).
    *
    * @param slug - The object's slug.
    * @param options.caller - Recorded in the audit log as the calling program's self-reported identity.
-   * @throws {APIError} If the server responds with anything other than 200 (e.g. 404).
+   * @throws {APIError} If the server responds with anything other than 200 (e.g. 401 with no valid credential, or 404).
    */
   async getObject(slug: string, options: { caller?: string } = {}): Promise<Uint8Array> {
     const response = await this.request("GET", `/objects/${encodeURIComponent(slug)}`, {
+      readCredential: true,
       caller: options.caller,
     });
     return new Uint8Array(await response.arrayBuffer());
@@ -327,6 +347,9 @@ export class Client {
     if (options.caller !== undefined) headers.set("X-Caller", options.caller);
     if (options.authenticated === true && this.apiKey !== undefined) {
       headers.set("Authorization", `Bearer ${this.apiKey}`);
+    } else if (options.readCredential === true) {
+      const token = this.apiKey ?? this.readToken;
+      if (token !== undefined) headers.set("Authorization", `Bearer ${token}`);
     }
 
     let body: RequestInit["body"] = options.body;
