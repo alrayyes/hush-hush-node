@@ -3,13 +3,17 @@ import { APIError, Client } from "../../src/index.js";
 import { createFakeFetch } from "./fake-fetch.js";
 
 const ENV_VAR = "HUSH_HUSH_API_KEY";
+const READ_ENV_VAR = "HUSH_HUSH_READ_TOKEN";
 
 describe("Client construction", () => {
   const original = process.env[ENV_VAR];
+  const originalRead = process.env[READ_ENV_VAR];
 
   afterEach(() => {
     if (original === undefined) delete process.env[ENV_VAR];
     else process.env[ENV_VAR] = original;
+    if (originalRead === undefined) delete process.env[READ_ENV_VAR];
+    else process.env[READ_ENV_VAR] = originalRead;
   });
 
   it("uses HUSH_HUSH_API_KEY from the environment when no credential is given", async () => {
@@ -35,11 +39,37 @@ describe("Client construction", () => {
 
     expect(requests[0]?.headers.get("authorization")).toBe("Bearer explicit-token");
   });
+
+  it("uses HUSH_HUSH_READ_TOKEN from the environment when no read credential is given", async () => {
+    delete process.env[ENV_VAR];
+    process.env[READ_ENV_VAR] = "env-read-token";
+    const { fetch, requests } = createFakeFetch([{ status: 200, body: new Uint8Array([1]) }]);
+    const client = new Client("https://hush-hush.test", { fetch });
+
+    await client.getObject("my-object");
+
+    expect(requests[0]?.headers.get("authorization")).toBe("Bearer env-read-token");
+  });
+
+  it("uses an explicit read credential over the environment variable", async () => {
+    delete process.env[ENV_VAR];
+    process.env[READ_ENV_VAR] = "env-read-token";
+    const { fetch, requests } = createFakeFetch([{ status: 200, body: new Uint8Array([1]) }]);
+    const client = new Client("https://hush-hush.test", {
+      readToken: "explicit-read-token",
+      fetch,
+    });
+
+    await client.getObject("my-object");
+
+    expect(requests[0]?.headers.get("authorization")).toBe("Bearer explicit-read-token");
+  });
 });
 
 describe("Typed resource operations", () => {
   beforeEach(() => {
     delete process.env[ENV_VAR];
+    delete process.env[READ_ENV_VAR];
   });
 
   it("sends a typed create request and returns a typed response", async () => {
@@ -71,14 +101,40 @@ describe("Typed resource operations", () => {
     expect(result).toEqual(sealed);
   });
 
-  it("succeeds on a read-only call without any credential set", async () => {
+  it("sends no Authorization header when no credential is configured", async () => {
     delete process.env[ENV_VAR];
+    delete process.env[READ_ENV_VAR];
     const { fetch, requests } = createFakeFetch([{ status: 200, body: new Uint8Array([1]) }]);
     const client = new Client("https://hush-hush.test", { fetch });
 
     await client.getObject("my-object");
 
     expect(requests[0]?.headers.has("authorization")).toBe(false);
+  });
+
+  it("uses the write apiKey as the read credential when both are configured", async () => {
+    delete process.env[READ_ENV_VAR];
+    const { fetch, requests } = createFakeFetch([{ status: 200, body: new Uint8Array([1]) }]);
+    const client = new Client("https://hush-hush.test", {
+      apiKey: "write-token",
+      readToken: "read-token",
+      fetch,
+    });
+
+    await client.getObject("my-object");
+
+    expect(requests[0]?.headers.get("authorization")).toBe("Bearer write-token");
+  });
+
+  it("falls back to the read token when no write apiKey is configured", async () => {
+    delete process.env[ENV_VAR];
+    delete process.env[READ_ENV_VAR];
+    const { fetch, requests } = createFakeFetch([{ status: 200, body: new Uint8Array([1]) }]);
+    const client = new Client("https://hush-hush.test", { readToken: "read-token", fetch });
+
+    await client.getObject("my-object");
+
+    expect(requests[0]?.headers.get("authorization")).toBe("Bearer read-token");
   });
 
   it("attaches X-Caller per call, not client-wide", async () => {
@@ -246,5 +302,20 @@ describe("Typed error mapping", () => {
 
     expect(error).toBeInstanceOf(APIError);
     expect(error).toMatchObject({ status: 404, apiMessage: "unknown object" });
+  });
+
+  it("raises a typed 401 when a get has no valid credential", async () => {
+    const { fetch } = createFakeFetch([
+      {
+        status: 401,
+        body: JSON.stringify({ error: "missing or invalid bearer token or session" }),
+      },
+    ]);
+    const client = new Client("https://hush-hush.test", { fetch });
+
+    const error: unknown = await client.getObject("my-object").catch((err: unknown) => err);
+
+    expect(error).toBeInstanceOf(APIError);
+    expect(error).toMatchObject({ status: 401 });
   });
 });

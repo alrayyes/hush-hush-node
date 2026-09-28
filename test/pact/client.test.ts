@@ -17,10 +17,16 @@ const pact = new PactV3({
 
 describe("pact", () => {
   it("gets an object", async () => {
+    const { like } = MatchersV3;
+
     pact
       .given("an object exists with id my-object")
       .uponReceiving("a request to get an object")
-      .withRequest({ method: "GET", path: "/objects/my-object" })
+      .withRequest({
+        method: "GET",
+        path: "/objects/my-object",
+        headers: { Authorization: like("Bearer token") },
+      })
       .willRespondWith({
         status: 200,
         headers: { "Content-Type": "application/octet-stream" },
@@ -28,7 +34,7 @@ describe("pact", () => {
       });
 
     await pact.executeTest(async (mockServer) => {
-      const client = new Client(mockServer.url);
+      const client = new Client(mockServer.url, { apiKey: "token" });
       const got = await client.getObject("my-object");
       const decoded = new TextDecoder().decode(got);
       if (decoded !== "sealed-bytes") {
