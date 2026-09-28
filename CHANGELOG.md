@@ -1,5 +1,19 @@
 # Changelog
 
+## [6.3.0](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.2.1...sdk-v6.3.0) (2026-09-28)
+
+
+### Features
+
+* **client:** send a bearer credential on getObject ([14ffb04](https://github.com/alrayyes/hush-hush-node/commit/14ffb0458b2cf2ab48d2426d4fbaf3710de04c6b)), closes [#174](https://github.com/alrayyes/hush-hush-node/issues/174)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump the bun-dependencies group with 5 updates ([#173](https://github.com/alrayyes/hush-hush-node/issues/173)) ([3463cde](https://github.com/alrayyes/hush-hush-node/commit/3463cde0271fb0a6ec6def393f23792111854e7a))
+* regenerate client from updated hush-hush spec ([21eedd1](https://github.com/alrayyes/hush-hush-node/commit/21eedd13323fa6e47c8976ae40e13942dc979bb0))
+* regenerate client from updated hush-hush spec ([138d35b](https://github.com/alrayyes/hush-hush-node/commit/138d35bd172dd58bbcc3cf66ce0081cdad9309c2))
+
 ## [6.2.1](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.2.0...sdk-v6.2.1) (2026-09-27)
 
 
