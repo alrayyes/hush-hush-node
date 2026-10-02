@@ -1,5 +1,15 @@
 # Changelog
 
+## [6.3.3](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.2...sdk-v6.3.3) (2026-10-02)
+
+
+### Bug Fixes
+
+* **deps:** bump dev dependencies flagged by new advisories ([0d73719](https://github.com/alrayyes/hush-hush-node/commit/0d73719e9bb5cc1e1f4894e4748ddd2cbe26b8ad))
+* **deps:** bump dev dependencies flagged by new advisories ([05b0d04](https://github.com/alrayyes/hush-hush-node/commit/05b0d04c9607d07c2bf709136005383ca0cde345)), closes [#182](https://github.com/alrayyes/hush-hush-node/issues/182)
+* regenerate client from updated hush-hush spec ([2b9d571](https://github.com/alrayyes/hush-hush-node/commit/2b9d5712351b87ffd2a558f354a7d6ab38ecc062))
+* regenerate client from updated hush-hush spec ([16f5163](https://github.com/alrayyes/hush-hush-node/commit/16f5163fe21e54fe1a81e6c5c0358f8d5bb42023))
+
 ## [6.3.2](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.1...sdk-v6.3.2) (2026-09-28)
 
 
