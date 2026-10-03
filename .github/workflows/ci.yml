@@ -183,7 +183,7 @@ jobs:
         run: |
           docker run -d --name prism -p 4010:4010 \
             -v "$(pwd)/hush-hush/api:/spec:ro" \
-            stoplight/prism:5 mock -h 0.0.0.0 -m false /spec/openapi.yaml
+            stoplight/prism:5@sha256:3f6d29e31bfe0b99587f0f6f79c423858dd6a2ea7e1e4658273ed930a78a9acf mock -h 0.0.0.0 -m false /spec/openapi.yaml
           # -m false: Prism's default multiprocess (Node cluster) mode
           # crashes on startup in this image — see hush-hush-go's CLAUDE.md
           # for the reproduction.
