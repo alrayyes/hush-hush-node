@@ -1,11 +1,16 @@
 # Builds the API reference from TSDoc comments and publishes it to GitHub
 # Pages. Separate from ci.yml's own jobs since this deploys something
 # (a live site), not just checks a diff.
+#
+# Also runs on pull_request (build only, deploy stays push-to-main-only) so a
+# change that breaks typedoc fails its own checks instead of only failing the
+# push to main after it has merged. hush-hush-php does the same.
 name: docs
 
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -40,6 +45,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment:
