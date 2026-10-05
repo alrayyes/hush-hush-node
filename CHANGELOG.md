@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.3.13](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.12...sdk-v6.3.13) (2026-10-05)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump the bun-dependencies group with 5 updates ([#210](https://github.com/alrayyes/hush-hush-node/issues/210)) ([970bf05](https://github.com/alrayyes/hush-hush-node/commit/970bf0501307a93ce811412a41d77b6d8fb2a621))
+* regenerate client from updated hush-hush spec ([#211](https://github.com/alrayyes/hush-hush-node/issues/211)) ([605ae43](https://github.com/alrayyes/hush-hush-node/commit/605ae437781933b66633659924eae4dd792e1591))
+
 ## [6.3.12](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.11...sdk-v6.3.12) (2026-10-03)
 
 
