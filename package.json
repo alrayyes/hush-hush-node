@@ -52,7 +52,10 @@
     "typecheck": "tsc --noEmit"
   },
   "overrides": {
-    "smol-toml": "1.7.2"
+    "katex": "0.19.0",
+    "proxy-addr": "2.0.8",
+    "smol-toml": "1.9.0",
+    "source-map-js": "1.2.2"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
