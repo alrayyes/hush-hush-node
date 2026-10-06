@@ -28,6 +28,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version-file: package.json
@@ -39,6 +41,26 @@ jobs:
       # --projectDocuments renders markdown into an HTML page rather than
       # copying it verbatim) — so llms.txt is copied in here instead.
       - run: cp llms.txt site/llms.txt
+      # Test and coverage reports for apis.ryankes.eu. A deploy replaces the
+      # whole site, so every push to main builds them here, in the job that
+      # assembles the site: a red test fails the job and nothing deploys.
+      # Pull requests skip this, ci.yml already runs the tests there.
+      #
+      # Left out: the contract job (needs a Prism container, so it stays in
+      # ci.yml) and the e2e smoke tests (nightly, against a staging server).
+      - name: Run the tests for the reports
+        if: github.event_name == 'push'
+        run: |
+          bun run test --reporter=default --reporter=junit --outputFile=reports/unit.xml
+          bun run test:pact --reporter=default --reporter=junit --outputFile=reports/pact.xml
+      - name: Stage the reports
+        if: github.event_name == 'push'
+        run: |
+          mkdir -p site/reports/tests site/reports/coverage
+          cp reports/unit.xml reports/pact.xml site/reports/tests/
+          cp -r coverage/. site/reports/coverage/
+          mv site/reports/coverage/cobertura-coverage.xml site/reports/coverage/coverage.xml
+          cp scripts/reports-index.html site/reports/index.html
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site

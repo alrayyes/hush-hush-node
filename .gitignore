@@ -16,3 +16,6 @@ pact/pacts/
 
 # Written by the release job, not by hand.
 CHANGELOG.md
+
+# Test reports staged by docs.yml
+reports/
