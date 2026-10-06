@@ -63,7 +63,8 @@ whichever consumer it's bound to, via the object's own recorded
 `usedBy`. A per-call `caller` option, accepted by create/get/update/delete,
 is optional. The package ships both ESM and CommonJS builds. See the
 [full API reference](https://alrayyes.github.io/hush-hush-node/) for
-everything else.
+everything else. The latest green run's test and coverage reports are at
+<https://apis.ryankes.eu/hush-hush-node/reports/>.
 
 ## Versioning
 
