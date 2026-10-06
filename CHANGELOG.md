@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.3.20](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.19...sdk-v6.3.20) (2026-10-06)
+
+
+### Bug Fixes
+
+* **deps-dev:** override four packages past their advisories ([5de9e58](https://github.com/alrayyes/hush-hush-node/commit/5de9e5827c3edabd02578558d1423d6f8c9a4da4))
+* **deps-dev:** override four packages past their advisories ([1e1e1a6](https://github.com/alrayyes/hush-hush-node/commit/1e1e1a644f9bd2b0803c1a7e2551421959cc015d))
+
 ## [6.3.19](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.18...sdk-v6.3.19) (2026-10-05)
 
 
