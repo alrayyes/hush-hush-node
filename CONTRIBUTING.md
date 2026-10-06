@@ -29,8 +29,10 @@ bun run format:check         # prettier --check, add :write to fix
 bun run lint:md
 ```
 
-`docs.yml` runs the unit and pact tests on every push to `main` and publishes
-their JUnit and coverage reports with the API reference, under `/reports/`.
+`ci.yml`'s `pages` job assembles the API reference at the site root and the
+unit and pact JUnit and coverage reports under `/reports/`, from the test
+jobs' artifacts. It runs on pull requests too, so a broken step fails before
+the merge, and only a push to `main` deploys it.
 
 ## How it fits together
 

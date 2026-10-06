@@ -49,9 +49,9 @@ jobs:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
       # --reporter=junit (alongside the default reporter) feeds Codecov
-      # Test Analytics below.
+      # Test Analytics below and the published reports.
       - name: vitest (hand-written layer only; see design.md's testing layers)
-        run: bunx vitest run test/unit --coverage --reporter=default --reporter=junit --outputFile=junit.xml
+        run: bunx vitest run test/unit --coverage --reporter=default --reporter=junit --outputFile=reports/unit.xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
@@ -77,8 +77,18 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
-          files: junit.xml
+          files: reports/unit.xml
           fail_ci_if_error: false
+      # The Pages job publishes these. They upload on pull requests too, so
+      # its assembly runs there and a broken step fails before the merge.
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: unit-test-results
+          path: reports/unit.xml
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage
+          path: coverage/
 
   audit:
     runs-on: ubuntu-24.04
@@ -215,11 +225,103 @@ jobs:
         with:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
-      - run: bun run test:pact
+      - run: bun run test:pact --reporter=default --reporter=junit --outputFile=reports/pact.xml
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: hush-hush-node-pact
           path: pact/pacts/*.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pact-test-results
+          path: reports/pact.xml
+
+  # The one Pages job: the API reference plus the test and coverage reports
+  # for apis.ryankes.eu, assembled into one site/. A deploy replaces the whole
+  # site, so this runs on every push to main whatever changed, and `needs`
+  # every other job so a red run publishes nothing. On a pull request it
+  # assembles the site and stops, so a broken step fails before the merge.
+  # Left out of the reports: the contract job (needs a Prism container) and
+  # the e2e smoke tests (nightly, against a staging server).
+  pages:
+    needs:
+      - actionlint
+      - lint
+      - test
+      - audit
+      - build
+      - codegen-drift
+      - markdown
+      - grammar
+      - style
+      - contract
+      - pact-consumer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run docs
+      # TypeDoc has no option to copy an arbitrary static file into its
+      # output root (checked its full --help against 0.28: --customCss/
+      # --customJs/--favicon/--cname each target one specific asset, and
+      # --projectDocuments renders markdown into an HTML page rather than
+      # copying it verbatim) - so llms.txt is copied in here instead.
+      - run: cp llms.txt site/llms.txt
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: unit-test-results
+          path: site/reports/tests
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: pact-test-results
+          path: site/reports/tests
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: coverage
+          path: site/reports/coverage
+      - name: Assemble the reports
+        run: |
+          mv site/reports/coverage/cobertura-coverage.xml site/reports/coverage/coverage.xml
+          cp scripts/reports-index.html site/reports/index.html
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        if: github.event_name == 'push'
+        with:
+          path: site
+
+  # Its own job so the github-pages environment, limited to main, never
+  # blocks a pull request's run.
+  deploy:
+    if: github.event_name == 'push'
+    needs: pages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      # The deploy succeeds even when the site serves a 404, so fetch the
+      # real file. The retries cover the CDN catching up.
+      - name: Check the live coverage report
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          curl --fail --silent --show-error --location --retry 6 --retry-delay 10 \
+            --retry-all-errors --output coverage.xml \
+            "${PAGE_URL%/}/reports/coverage/coverage.xml"
+          grep -q '<coverage ' coverage.xml
 
   commits:
     if: github.event_name == 'pull_request'
