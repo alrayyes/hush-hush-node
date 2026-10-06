@@ -84,7 +84,5 @@ Merging the release pull request also publishes the new version to npm:
 `release_created` output is true, authenticating via npm Trusted
 Publishing (OIDC, configured on the `@hush-hush/sdk` package on npmjs.com)
 rather than a stored token, and passes `--provenance`. Publishing used to
-be a manual step tracked in
-[hush-hush issue #76](https://github.com/alrayyes/hush-hush/issues/76);
-that box is now permanently checked off for Node rather than a one-off
-per release.
+be a manual step that was easy to forget; it's now permanently automated
+for Node rather than a one-off per release.
