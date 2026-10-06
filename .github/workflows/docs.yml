@@ -76,3 +76,13 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      # The deploy succeeds even when the site serves a 404, so fetch the
+      # real file. The retries cover the CDN catching up.
+      - name: Check the live coverage report
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          curl --fail --silent --show-error --location --retry 6 --retry-delay 10 \
+            --retry-all-errors --output coverage.xml \
+            "${PAGE_URL%/}/reports/coverage/coverage.xml"
+          grep -q '<coverage ' coverage.xml
