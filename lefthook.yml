@@ -1,6 +1,12 @@
 # The same commands CI runs, so the two cannot drift. The hook catches it
 # early; CI is the gate that cannot be skipped.
 
+# Silent on a clean run, full detail on a failure. lefthook's default prints a
+# banner and a line per job, which is noise to a person and pure token cost once
+# a hook's output lands in an agent's tool result (rules/linting.md).
+output:
+  - failure
+
 pre-commit:
   jobs:
     - name: biome
