@@ -99,12 +99,13 @@ jobs:
         with:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
-      # GHSA-vfj7-8cjw-p6xm (braces) is ignored: no patched release exists
-      # (the range is <= 3.0.3, the latest), and the only path is
+      # The ignore list lives in the `audit` script in package.json.
+      # GHSA-vfj7-8cjw-p6xm (braces) is ignored there: no patched release
+      # exists (the range is <= 3.0.3, the latest), and the only path is
       # markdownlint-cli2 > micromatch, which globs this repo's own fixed
       # patterns in dev tooling that doesn't ship. Remove the flag once braces
       # has a fix (alrayyes/hush-hush-node#196).
-      - run: bun audit --ignore GHSA-vfj7-8cjw-p6xm
+      - run: bun run audit
 
   build:
     runs-on: ubuntu-24.04

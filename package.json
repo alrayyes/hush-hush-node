@@ -34,6 +34,7 @@
     "dist"
   ],
   "scripts": {
+    "audit": "bun audit --ignore GHSA-vfj7-8cjw-p6xm",
     "build": "tsup",
     "codegen": "./scripts/generate.sh",
     "docs": "typedoc",
