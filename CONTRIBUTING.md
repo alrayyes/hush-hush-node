@@ -13,6 +13,11 @@ bun install
 The `prepare` script runs `lefthook install` for you — an uninstalled hook
 silently does nothing, which is worse than not having one.
 
+`pre-commit` judges only what the commit contains: it runs on the staged
+files, fixes them in place and never fetches anything. Whole-tree checks
+(`actionlint`, the full Vale and grammar runs, type checks, tests) run in
+`pre-push` and in CI. Run `bunx lefthook run pre-push` to get them early.
+
 This repo pulls hush-hush's OpenAPI spec in as a git submodule. Clone with
 `git clone --recurse-submodules`, or run `git submodule update --init` after
 a plain clone.
