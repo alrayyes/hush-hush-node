@@ -1,5 +1,9 @@
 # The same commands CI runs, so the two cannot drift. The hook catches it
 # early; CI is the gate that cannot be skipped.
+#
+# pre-commit judges only what the commit contains: every job takes
+# {staged_files} and none scans the tree or fetches over the network. Tools
+# that can't take a file list (actionlint) run in pre-push instead.
 
 # Silent on a clean run, full detail on a failure. lefthook's default prints a
 # banner and a line per job, which is noise to a person and pure token cost once
@@ -24,17 +28,13 @@ pre-commit:
       run: bunx markdownlint-cli2 {staged_files}
 
     - name: vale
-      glob: "*.md"
-      run: ./scripts/lint-vale.sh
+      glob: "{README,CONTRIBUTING,CLAUDE,SECURITY}.md"
+      run: ./scripts/lint-vale.sh {staged_files}
 
     - name: sort-package-json
       glob: "package.json"
       run: bunx sort-package-json {staged_files}
       stage_fixed: true
-
-    - name: actionlint
-      glob: ".github/workflows/*.{yml,yaml}"
-      run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
 
 commit-msg:
   jobs:
@@ -64,6 +64,12 @@ pre-push:
 
     - name: vale
       run: ./scripts/lint-vale.sh
+
+    - name: actionlint
+      run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
+
+    - name: precommit-staged-only
+      run: ./scripts/test-precommit-staged.sh
 
     - name: ltex
       run: ./scripts/lint-ltex.sh
