@@ -32,6 +32,7 @@ bun run test                 # unit tests only; contract/pact need extra setup, 
 
 bun run format:check         # prettier --check, add :write to fix
 bun run lint:md
+bun run audit                # bun audit with the ignore list from package.json
 ```
 
 `ci.yml`'s `pages` job assembles the API reference at the site root and the
