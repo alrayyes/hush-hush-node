@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.3.28](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.27...sdk-v6.3.28) (2026-10-13)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump lefthook ([#256](https://github.com/alrayyes/hush-hush-node/issues/256)) ([8fd1ef5](https://github.com/alrayyes/hush-hush-node/commit/8fd1ef545fec66bdd333a8cc17e0a32e6459c93c))
+* regenerate client from updated hush-hush spec ([#257](https://github.com/alrayyes/hush-hush-node/issues/257)) ([8f22917](https://github.com/alrayyes/hush-hush-node/commit/8f2291740bffa07942246b10dda6883a12df48b7))
+
 ## [6.3.27](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.26...sdk-v6.3.27) (2026-10-11)
 
 
