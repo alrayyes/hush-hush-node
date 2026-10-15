@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.38](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.37...sdk-v6.3.38) (2026-10-15)
+
+
+### Bug Fixes
+
+* **ci:** run release-auto-merge when the autorelease label is added ([#281](https://github.com/alrayyes/hush-hush-node/issues/281)) ([542cbf9](https://github.com/alrayyes/hush-hush-node/commit/542cbf9d7704584355b1d3ea7de1fcca31f58646)), closes [#280](https://github.com/alrayyes/hush-hush-node/issues/280)
+
 ## [6.3.37](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.36...sdk-v6.3.37) (2026-10-15)
 
 
