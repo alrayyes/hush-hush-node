@@ -32,7 +32,7 @@ bun run test                 # unit tests only; contract/pact need extra setup, 
 
 bun run format:check         # prettier --check, add :write to fix
 bun run lint:md
-bun run audit                # bun audit with the ignore list from package.json
+bun run audit                # bun audit, the whole lockfile
 ```
 
 `ci.yml`'s `pages` job assembles the API reference at the site root and the
@@ -60,6 +60,19 @@ owned by this repo, and here only for its spec-first
 `hush-hush/api/openapi.yaml`. Don't edit anything under it; a spec change
 belongs in hush-hush, and this repo picks it up on the next scheduled
 regeneration (`.github/workflows/codegen.yml`).
+
+## Dependency advisories
+
+Two jobs share the work, both through
+[advisory-scan](https://github.com/alrayyes/advisory-scan). The `audit` job in
+`ci.yml` runs `bun audit` on the pull request and on its base and fails only
+on advisories the pull request adds, so an advisory published overnight
+doesn't turn unrelated pull requests red. It does its work only when
+`package.json` or `bun.lock` changes. `advisory-scan.yml` audits `main` daily,
+on every push that changes `package.json` or `bun.lock`, and on demand, and
+keeps one open issue titled "Dependency advisories" listing what it finds. It
+closes that issue when the audit is clean. There's no ignore list: an advisory
+with no fix stays in that issue until one ships.
 
 ## Commit messages
 

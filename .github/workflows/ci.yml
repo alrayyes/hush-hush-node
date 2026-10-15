@@ -90,22 +90,37 @@ jobs:
           name: coverage
           path: coverage/
 
+  # Fails only on advisories this change adds over its base (rules/dependencies.md).
+  # What is already on main is the scan's to track, in advisory-scan.yml. The check
+  # always reports so it can stay required; its steps run only when a pull request
+  # changes the manifest or lockfile, and always on a push to main.
   audit:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          fetch-depth: 0
+      - id: deps
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "$EVENT" != pull_request ] || git diff --name-only "$BASE" HEAD | grep -qE '^(package\.json|bun\.lock|\.github/workflows/ci\.yml)$'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.deps.outputs.run == 'true'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version-file: package.json
-      - run: bun install --frozen-lockfile --ignore-scripts
-      # The ignore list lives in the `audit` script in package.json.
-      # GHSA-vfj7-8cjw-p6xm (braces) is ignored there: no patched release
-      # exists (the range is <= 3.0.3, the latest), and the only path is
-      # markdownlint-cli2 > micromatch, which globs this repo's own fixed
-      # patterns in dev tooling that doesn't ship. Remove the flag once braces
-      # has a fix (alrayyes/hush-hush-node#196).
-      - run: bun run audit
+      # Pinned to a main commit of alrayyes/advisory-scan until its first release; re-pin then.
+      - if: steps.deps.outputs.run == 'true'
+        uses: alrayyes/advisory-scan@425418a63e80eb10142fbd2e82127b7ef3a51d68
+        with:
+          mode: gate
+          command: bun audit
 
   build:
     runs-on: ubuntu-24.04
