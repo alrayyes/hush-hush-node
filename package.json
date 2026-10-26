@@ -63,14 +63,14 @@
     "source-map-js": "1.2.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.15",
-    "@commitlint/cli": "21.2.3",
-    "@commitlint/config-conventional": "21.2.3",
+    "@biomejs/biome": "2.6.2",
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
     "@pact-foundation/pact": "17.1.4",
     "@types/node": "26.6.5",
     "@vitest/coverage-v8": "5.0.5",
     "lefthook": "2.2.2",
-    "markdownlint-cli2": "0.23.3",
+    "markdownlint-cli2": "0.24.0",
     "openapi-typescript": "7.13.0",
     "prettier": "3.9.10",
     "sort-package-json": "4.1.0",
