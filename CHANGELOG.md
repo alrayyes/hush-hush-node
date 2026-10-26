@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.40](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.39...sdk-v6.3.40) (2026-10-26)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump the bun-dependencies group across 1 directory with 4 updates ([#290](https://github.com/alrayyes/hush-hush-node/issues/290)) ([c5664c2](https://github.com/alrayyes/hush-hush-node/commit/c5664c28d1797b37302a23fe4d77301b9c6874b6))
+
 ## [6.3.39](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.38...sdk-v6.3.39) (2026-10-26)
 
 
