@@ -1,5 +1,15 @@
 # Changelog
 
+## [6.3.39](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.38...sdk-v6.3.39) (2026-10-26)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump the bun-dependencies group with 6 updates ([#288](https://github.com/alrayyes/hush-hush-node/issues/288)) ([5d54c76](https://github.com/alrayyes/hush-hush-node/commit/5d54c762278cc0ac345aef0735819323b7927d00))
+* **deps-dev:** bump tsup ([#289](https://github.com/alrayyes/hush-hush-node/issues/289)) ([5b27cde](https://github.com/alrayyes/hush-hush-node/commit/5b27cdecef36274acd0359363aa8eb31707d0615))
+* **lint:** keep Biome out of Markdown ([#292](https://github.com/alrayyes/hush-hush-node/issues/292)) ([b5effea](https://github.com/alrayyes/hush-hush-node/commit/b5effea4a3743c248b31ce9651c87a4213e24f1b))
+* sort package.json so the pre-push check passes ([#294](https://github.com/alrayyes/hush-hush-node/issues/294)) ([c763b04](https://github.com/alrayyes/hush-hush-node/commit/c763b0495d5bbea5571ff24691c3d2900de0f270))
+
 ## [6.3.38](https://github.com/alrayyes/hush-hush-node/compare/sdk-v6.3.37...sdk-v6.3.38) (2026-10-15)
 
 
