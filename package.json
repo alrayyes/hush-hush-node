@@ -52,6 +52,10 @@
     "test:pact": "vitest run test/pact",
     "typecheck": "tsc --noEmit"
   },
+  "allowScripts": {
+    "esbuild@0.27.2": true,
+    "lefthook@2.1.12": true
+  },
   "overrides": {
     "katex": "0.19.0",
     "proxy-addr": "2.0.8",
@@ -81,9 +85,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "allowScripts": {
-    "lefthook@2.1.12": true,
-    "esbuild@0.27.2": true
   }
 }
