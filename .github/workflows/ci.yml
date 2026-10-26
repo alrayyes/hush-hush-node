@@ -36,6 +36,7 @@ jobs:
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run typecheck
       - run: bunx biome check .
+      - run: bun run sort-package-json:check
 
   test:
     runs-on: ubuntu-24.04
